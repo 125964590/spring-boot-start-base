@@ -1,0 +1,4 @@
+# �Զ����ע���Զ���Ҫʵ��DeferredImportSelector,������ʵ����
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  top.jbzm.start.swagger.Swagger2,\
+  top.jbzm.start.swagger.SwaggerProperties
