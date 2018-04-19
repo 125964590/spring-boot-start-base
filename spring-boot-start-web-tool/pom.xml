@@ -17,7 +17,7 @@
         <dependency>
             <groupId>top.jbzm.common</groupId>
             <artifactId>base-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0-${project.environment}-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
