@@ -19,6 +19,7 @@ import top.jbzm.common.SuccessResponse;
 import top.jbzm.exception.MyException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
 
 
 /**
@@ -27,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created time 2016-04-18 09:56
  */
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
+
 @ControllerAdvice
 @ConditionalOnProperty(value = "jbzm.web.tool.result", havingValue = "true", matchIfMissing = true)
 public class WrapperResponseBodyAdvice implements ResponseBodyAdvice {
