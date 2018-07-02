@@ -20,4 +20,7 @@
         <module>spring-boot-start-swagger2</module>
         <module>spring-boot-start-web-tool</module>
     </modules>
+    <build>
+        <defaultGoal>compile</defaultGoal>
+    </build>
 </project>
