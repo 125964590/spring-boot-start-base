@@ -32,5 +32,8 @@
     </dependency>
 
 </dependencies>
+    <build>
+        <defaultGoal>compile</defaultGoal>
+    </build>
     
 </project>
