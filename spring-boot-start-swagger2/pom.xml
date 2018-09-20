@@ -8,7 +8,7 @@
     <version>1.0-${project.environment}-SNAPSHOT</version>
 
     <parent>
-        <groupId>top.jbzm.start</groupId>
+        <groupId>com.ht.base.start</groupId>
         <artifactId>spring-boot-start-base</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -19,6 +19,10 @@
         <artifactId>spring-boot-starter-web</artifactId>
         <optional>true</optional>
     </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-configuration-processor</artifactId>
+    </dependency>
     <!-- 使用swagger2管理rest -->
     <dependency>
         <groupId>io.springfox</groupId>
@@ -26,14 +30,14 @@
         <version>${swagger2.version}</version>
     </dependency>
     <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
         <groupId>io.springfox</groupId>
         <artifactId>springfox-swagger-ui</artifactId>
         <version>${swagger2.version}</version>
     </dependency>
-
 </dependencies>
-    <build>
-        <defaultGoal>compile</defaultGoal>
-    </build>
     
 </project>

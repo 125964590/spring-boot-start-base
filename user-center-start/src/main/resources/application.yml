@@ -1,0 +1,4 @@
+user:
+  center:
+    enable: true
+#    auth-paths: ""

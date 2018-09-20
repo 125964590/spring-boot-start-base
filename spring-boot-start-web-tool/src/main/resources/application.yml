@@ -1,0 +1,4 @@
+jbzm:
+  web:
+    tool:
+      exception: true
