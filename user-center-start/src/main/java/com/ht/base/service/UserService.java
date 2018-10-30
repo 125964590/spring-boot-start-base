@@ -1,6 +1,7 @@
 package com.ht.base.service;
 
 import com.ht.base.dto.ResponseData;
+import com.ht.base.user.security.UserInfo;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserService {
     @RequestLine("GET /register/{id}")
     ResponseData getUser(@Param("id") Long id);
+
 
     @RequestLine("POST /register")
     @Headers({"Accept: application/json", "Content-Type: application/json"})

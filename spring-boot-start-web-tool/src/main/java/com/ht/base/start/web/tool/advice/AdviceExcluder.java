@@ -27,7 +27,7 @@ public class AdviceExcluder {
 
     public AdviceExcluder(Set<String> ignoreClasses, List<String> ignoreUrls) {
         //_monitor不能定于在mapping中
-        this.ignoreUrls.add("/**/_monitjor/**");
+        this.ignoreUrls.add("/**/_monitor/**");
         this.ignoreUrls.add("/**/actuator/**");
         this.ignoreUrls.add("/**/swagger-resources/**");
         this.ignoreUrls.add("/**/v2/api-docs/**");
