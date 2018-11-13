@@ -14,7 +14,6 @@ public class SwaggerProperties {
     /**
      * 是否开启swagger
      **/
-
     private Boolean enabled;
     /**
      * 分组名字

@@ -1,6 +1,6 @@
 package com.ht.base.module.po;
 
-import com.ht.base.user.security.UserInfo;
+import com.ht.base.user.module.security.UserInfo;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

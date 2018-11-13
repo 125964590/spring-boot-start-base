@@ -1,7 +1,8 @@
 package com.ht.base.config;
 
 import com.ht.base.config.web.RedisAuthenticationFilter;
-import com.ht.base.config.web.SecurityProperties;
+import com.ht.base.config.web.UserCenterProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,19 +15,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @date 2018/9/11 3:28 PM
  **/
 @EnableWebSecurity
-@EnableConfigurationProperties(SecurityProperties.class)
+@EnableConfigurationProperties(UserCenterProperties.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    public SecurityConfig(UserCenterProperties userCenterProperties) {
+        this.userCenterProperties = userCenterProperties;
+    }
 
     @Bean
     public RedisAuthenticationFilter redisAuthenticationFilter() {
         return new RedisAuthenticationFilter();
     }
 
-    private SecurityProperties securityProperties;
-
-    public SecurityConfig(SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
-    }
+    private final UserCenterProperties userCenterProperties;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(securityProperties.getAuthPaths()).authenticated()
+                .antMatchers(userCenterProperties.getAuthPaths()).authenticated()
                 .anyRequest().permitAll();
         http
                 .addFilterBefore(redisAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

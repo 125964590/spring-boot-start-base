@@ -1,4 +1,21 @@
 user:
   center:
     enable: true
-#    auth-paths: ""
+    auth-paths:
+      - /login
+      - /logout
+    url: http://localhost:11197
+spring:
+  output:
+    ansi:
+      enabled: always
+  redis:
+    cluster:
+      nodes: 192.168.100.20:6489,192.168.100.20:6589,192.168.100.20:6689
+server:
+  servlet:
+    context-path: /ut
+sample-clien:
+  ribbon:
+    listOfServers: http://localhost:11197
+
