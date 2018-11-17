@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  **/
 @Data
 @Component
-@ConfigurationProperties(prefix = "user.center")
+@ConfigurationProperties(prefix = "user-center")
 public class UserCenterProperties {
     /**
      * whether to enable
@@ -18,12 +18,24 @@ public class UserCenterProperties {
     private boolean enable;
 
     /**
+     * need pass authenticated request
+     */
+    private String[] authPassPaths = {"/null"};
+
+    /**
      * need authenticated request
      */
-    private String[] authPaths = {"/null"};
+    private String[] authPaths = {"/back"};
 
     /**
      * http://*******
      */
     private String url;
+
+    private Ribbon ribbon;
+
+    @Data
+    private class Ribbon {
+        private String listOfServers;
+    }
 }

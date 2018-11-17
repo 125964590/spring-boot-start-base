@@ -1,10 +1,11 @@
-user:
-  center:
-    enable: true
-    auth-paths:
-      - /login
-      - /logout
-    url: http://localhost:11197
+user-center:
+  enable: true
+  auth-paths:
+    - /auth/login
+    - /auth/logout
+  url: http://localhost:11197
+  ribbon:
+    listOfServers: http://localhost:11197
 spring:
   output:
     ansi:
@@ -15,7 +16,5 @@ spring:
 server:
   servlet:
     context-path: /ut
-sample-clien:
-  ribbon:
-    listOfServers: http://localhost:11197
+
 

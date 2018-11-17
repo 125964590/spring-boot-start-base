@@ -11,6 +11,10 @@ import lombok.Data;
 @Builder
 public class LoginRequest {
 
+    public final static String USERNAME_STRING = "username";
+
+    public final static String PASSWORD_STRING = "password";
+
     private String username;
 
     private String password;
