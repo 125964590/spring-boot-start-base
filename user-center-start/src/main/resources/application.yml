@@ -1,11 +1,13 @@
 user-center:
   enable: true
-  auth-paths:
-    - /auth/login
-    - /auth/logout
   url: http://localhost:11197
   ribbon:
     listOfServers: http://localhost:11197
+  auth-pass-paths:
+    - /back/lol
+    - /test
+  auth-paths:
+   - /back/**
 spring:
   output:
     ansi:
@@ -16,5 +18,7 @@ spring:
 server:
   servlet:
     context-path: /ut
+
+
 
 

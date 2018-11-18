@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.ht.base.config.base.AuthConstant.TOKEN;
+import static com.ht.base.module.base.AuthConstant.TOKEN;
 
 /**
  * @author zhengyi

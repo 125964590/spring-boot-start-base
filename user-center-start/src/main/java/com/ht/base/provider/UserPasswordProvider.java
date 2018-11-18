@@ -1,4 +1,4 @@
-package com.ht.base.handler;
+package com.ht.base.provider;
 
 import com.ht.base.dto.ResponseData;
 import com.ht.base.exception.MyAssert;
@@ -8,10 +8,10 @@ import com.ht.base.service.AuthServer;
 import com.ht.base.user.constant.result.NegativeResult;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.utils.RedisTokenUtils;
-import org.bouncycastle.cert.ocsp.RespData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -33,6 +33,11 @@ public class UserPasswordProvider extends AbstractUserDetailsAuthenticationProvi
     }
 
     @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        return super.authenticate(authentication);
+    }
+
+    @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
     }
@@ -44,10 +49,10 @@ public class UserPasswordProvider extends AbstractUserDetailsAuthenticationProvi
         MyAssert.BaseAssert(() -> login.getCode() == 1000000, new MyException(NegativeResult.INVALID_ARGUMENTS));
         String token = getToken(login);
         UserInfo userInfo = redisTokenUtils.getUserInfo(token);
-        return new com.ht.base.config.base.UserDetails(userInfo);
+        return new com.ht.base.module.base.UserDetails(userInfo);
     }
 
-    public String getToken(ResponseData responseData) {
+    private String getToken(ResponseData responseData) {
         return (String) ((LinkedHashMap) responseData.getData()).get("token");
     }
 }

@@ -1,4 +1,4 @@
-package com.ht.base.config.base;
+package com.ht.base.module.base;
 
 /**
  * @author zhengyi

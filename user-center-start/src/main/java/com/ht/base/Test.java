@@ -10,13 +10,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Test {
 
-    @GetMapping("test")
-    public String test() {
+    @GetMapping("/back/test")
+    public String test01() {
         return "success1111";
     }
 
     @GetMapping("lol")
     private String test02() {
         return "lol222";
+    }
+
+    @GetMapping("/test")
+    public String test03() {
+        return "success3333";
+    }
+
+    @GetMapping("/back/lol")
+    public String test04() {
+        return "success4444";
     }
 }

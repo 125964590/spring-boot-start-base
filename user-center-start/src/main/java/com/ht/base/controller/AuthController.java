@@ -1,22 +1,17 @@
 package com.ht.base.controller;
 
 import com.ht.base.common.ErrorResult;
-import com.ht.base.common.SuccessMessage;
-import com.ht.base.common.SuccessResponse;
-import com.ht.base.config.base.UserDetails;
+import com.ht.base.module.base.UserDetails;
 import com.ht.base.dto.ResponseData;
-import com.ht.base.handler.UserPasswordProvider;
 import com.ht.base.module.dto.BaseResult;
 import com.ht.base.module.dto.LoginRequest;
 import com.ht.base.service.AuthServer;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import sun.plugin.liveconnect.SecurityContextHelper;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * @author zhengyi
@@ -54,12 +49,18 @@ public class AuthController {
     @GetMapping("/login/page")
     @ResponseStatus(FORBIDDEN)
     public Object redirectLogin() {
-        return ErrorResult.create(401, "请跳转登录页");
+        return ErrorResult.create(403, "请跳转登录页");
     }
 
     @GetMapping("/login/success")
     public Object loginSuccess() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userDetails.getToken();
+    }
+
+    @GetMapping("/error")
+    @ResponseStatus(UNAUTHORIZED)
+    public Object errorPage() {
+        return ErrorResult.create(401, "没有访问权限");
     }
 }

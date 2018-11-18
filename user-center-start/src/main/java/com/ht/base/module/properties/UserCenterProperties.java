@@ -1,4 +1,4 @@
-package com.ht.base.config.web;
+package com.ht.base.module.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -25,7 +25,7 @@ public class UserCenterProperties {
     /**
      * need authenticated request
      */
-    private String[] authPaths = {"/back"};
+    private String[] authPaths = {"/back/**"};
 
     /**
      * http://*******
@@ -33,6 +33,8 @@ public class UserCenterProperties {
     private String url;
 
     private Ribbon ribbon;
+
+    private String lol;
 
     @Data
     private class Ribbon {

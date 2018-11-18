@@ -1,7 +1,6 @@
 package com.ht.base.filter;
 
-import com.ht.base.config.base.UserDetails;
-import com.ht.base.module.dto.LoginRequest;
+import com.ht.base.module.base.UserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

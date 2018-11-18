@@ -1,35 +1,38 @@
-package com.ht.base.module.po;
+package com.ht.base.module.base;
 
 import com.ht.base.user.module.security.UserInfo;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
+
+import static com.ht.base.module.base.AuthConstant.ROLE;
+
 
 /**
  * @author zhengyi
- * @date 2018/9/12 4:31 PM
+ * @date 11/16/18 4:44 PM
  **/
-@Data
-@Builder
-public class UserCustomDetails implements UserDetails {
-
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private UserInfo userInfo;
-    private Collection<? extends GrantedAuthority> authorities;
 
-    public static UserCustomDetails create(UserInfo userInfo) {
-        Set<SimpleGrantedAuthority> authorities = userInfo.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toSet());
-        return new UserCustomDetails(userInfo, authorities);
+    private String token;
+
+    public UserDetails(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + ROLE));
+        return authorityList;
+    }
+
+    public String getToken() {
+        return userInfo.getToken();
     }
 
     @Override
