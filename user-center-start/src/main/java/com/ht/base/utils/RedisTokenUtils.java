@@ -9,16 +9,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhengyi
  * @date 11/16/18 9:30 PM
  **/
-@Component
 public class RedisTokenUtils {
+
     private final StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
     public RedisTokenUtils(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }

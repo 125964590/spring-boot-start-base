@@ -8,7 +8,6 @@ import com.ht.base.service.AuthServer;
 import com.ht.base.user.constant.result.NegativeResult;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.utils.RedisTokenUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -25,11 +24,11 @@ public class UserPasswordProvider extends AbstractUserDetailsAuthenticationProvi
 
     private AuthServer authServer;
 
-    @Autowired
     private RedisTokenUtils redisTokenUtils;
 
-    public UserPasswordProvider(AuthServer authServer) {
+    public UserPasswordProvider(AuthServer authServer, RedisTokenUtils redisTokenUtils) {
         this.authServer = authServer;
+        this.redisTokenUtils = redisTokenUtils;
     }
 
     @Override

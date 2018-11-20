@@ -7,15 +7,11 @@ import com.ht.base.provider.RedisAuthenticationProvider;
 import com.ht.base.provider.UserPasswordProvider;
 import com.ht.base.service.AuthServer;
 import com.ht.base.utils.RedisTokenUtils;
-import com.sun.xml.internal.bind.v2.TODO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -23,15 +19,18 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static com.ht.base.module.base.AuthConstant.ROLE;
+
 
 /**
  * @author zhengyi
  * @date 2018/9/11 3:28 PM
  **/
-@EnableWebSecurity
-@EnableConfigurationProperties(UserCenterProperties.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LogoutSuccessHandler logoutHandler;
@@ -44,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RedisTokenUtils redisTokenUtils;
 
-    @Autowired
     public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, AuthServer authServer, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils) {
         this.userCenterProperties = userCenterProperties;
         this.logoutHandler = logoutHandler;
@@ -75,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserPasswordProvider userPasswordProvider() {
-        return new UserPasswordProvider(authServer);
+        return new UserPasswordProvider(authServer, redisTokenUtils);
     }
 
     @Bean
@@ -91,6 +89,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
 
         http
+                .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .and()
                 .cors()
                 .and()
                 .csrf()
@@ -131,5 +132,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(userPasswordProvider()).authenticationProvider(redisAuthenticationProvider());
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        //domain name
+        configuration.addAllowedOrigin("*");
+        //head information
+        configuration.addAllowedHeader("*");
+        //method type
+        configuration.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

@@ -1,4 +1,6 @@
-## �Զ����ע���Զ���Ҫʵ��DeferredImportSelector,������ʵ����
-#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-#  com.ht.base.start.swagger.Swagger2,\
-#  com.ht.base.start.swagger.SwaggerProperties
+org.springframework.cloud.openfeign=\
+  com.ht.base.service.AuthServer
+# �Զ����ע���Զ���Ҫʵ��DeferredImportSelector,������ʵ����
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ht.base.UserCenterAuthConfiguratin,\
+  com.ht.base.controller.AuthController

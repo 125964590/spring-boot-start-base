@@ -28,11 +28,11 @@ public class AuthController {
         this.authServer = authServer;
     }
 
-    @PostMapping("/login")
-    public Object login(@RequestBody LoginRequest loginRequest) {
-        ResponseData login = authServer.login(loginRequest);
-        return BaseResult.create(login.getCode(), login.getMessage(), login.getData());
-    }
+//    @PostMapping("/login")
+//    public Object login(@RequestBody LoginRequest loginRequest) {
+//        ResponseData login = authServer.login(loginRequest);
+//        return BaseResult.create(login.getCode(), login.getMessage(), login.getData());
+//    }
 
     @DeleteMapping("/logout")
     public Object logout(@RequestHeader String token) {

@@ -18,12 +18,11 @@ import static com.ht.base.module.base.AuthConstant.TOKEN;
  * @author zhengyi
  * @date 11/16/18 4:01 PM
  **/
-@Component("logoutHandler")
 public class LogoutHandler implements LogoutSuccessHandler {
 
     private AuthServer authServer;
 
-    LogoutHandler(AuthServer authServer) {
+    public LogoutHandler(AuthServer authServer) {
         this.authServer = authServer;
     }
 

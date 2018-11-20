@@ -1,4 +1,4 @@
-package com.ht.base;
+package com.ht.base.test;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,16 +1,16 @@
 package com.ht.base.module.properties;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author zhengyi
  * @date 2018/9/11 2:25 PM
  **/
 @Data
-@Component
 @ConfigurationProperties(prefix = "user-center")
+@NoArgsConstructor
 public class UserCenterProperties {
     /**
      * whether to enable
@@ -32,12 +32,4 @@ public class UserCenterProperties {
      */
     private String url;
 
-    private Ribbon ribbon;
-
-    private String lol;
-
-    @Data
-    private class Ribbon {
-        private String listOfServers;
-    }
 }
