@@ -32,4 +32,6 @@ public class UserCenterProperties {
      */
     private String url;
 
+    private String path = "/";
+
 }

@@ -61,7 +61,7 @@ public class AuthController {
     @GetMapping("/login/success")
     public Object loginSuccess() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDetails.getToken();
+        return BaseResult.create(userDetails.getToken());
     }
 
     @GetMapping("/error")
