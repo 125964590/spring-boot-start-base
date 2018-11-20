@@ -75,8 +75,8 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
 
     private void checkRequestTree(String method, String requestPath, String token) {
         final UserInfo userInfo = redisTokenUtils.getUserInfo(token);
-        //get local request path
-        String localRequestPath = serverProperties.getServlet().getContextPath();
+        //get local request path`
+        String localRequestPath = serverProperties.getContextPath();
         //search url in the application
         Menu menu = new Menu();
         menu.setRequestPath(localRequestPath);

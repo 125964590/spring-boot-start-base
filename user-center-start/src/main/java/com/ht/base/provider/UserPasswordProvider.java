@@ -3,7 +3,6 @@ package com.ht.base.provider;
 import com.ht.base.dto.ResponseData;
 import com.ht.base.exception.MyAssert;
 import com.ht.base.exception.MyException;
-import com.ht.base.module.dto.LoginRequest;
 import com.ht.base.service.AuthServer;
 import com.ht.base.user.constant.result.NegativeResult;
 import com.ht.base.user.module.security.UserInfo;
@@ -43,8 +42,8 @@ public class UserPasswordProvider extends AbstractUserDetailsAuthenticationProvi
 
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        LoginRequest loginRequest = LoginRequest.builder().username((String) authentication.getPrincipal()).password((String) authentication.getCredentials()).build();
-        ResponseData login = authServer.login(loginRequest);
+        ResponseData login = authServer.login((String) authentication.getPrincipal(),
+                (String) authentication.getCredentials());
         MyAssert.BaseAssert(() -> login.getCode() == 1000000, new MyException(NegativeResult.INVALID_ARGUMENTS));
         String token = getToken(login);
         UserInfo userInfo = redisTokenUtils.getUserInfo(token);

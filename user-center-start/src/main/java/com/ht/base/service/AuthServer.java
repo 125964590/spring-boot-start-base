@@ -2,42 +2,41 @@ package com.ht.base.service;
 
 import com.ht.base.dto.ResponseData;
 import com.ht.base.module.dto.LoginRequest;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import feign.*;
+
+import java.util.Map;
 
 /**
  * @author zhengyi
  * @date 2018/9/8 9:32 PM
  **/
-@FeignClient("user-center")
 public interface AuthServer {
 
     /**
      * login
      *
-     * @param loginRequest username and password
      * @return token
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/uc/auth/login")
-    ResponseData login(@RequestBody LoginRequest loginRequest);
+    @RequestLine("POST /uc/auth/login")
+    @Headers("Content-Type: application/json")
+    @Body("%7B\"username\": \"{username}\", \"password\": \"{password}\"%7D")
+    ResponseData login(@Param("username") String username, @Param("password") String password);
 
     /**
      * logout
      *
-     * @param token token
      * @return success
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/uc/auth/login")
-    ResponseData logout(@RequestHeader("token") String token);
+    @RequestLine("DELETE /uc/auth/logout")
+    ResponseData logout(@HeaderMap Map<String, Object> map);
 
     /**
      * get user info
      *
-     * @param token token
-     * @param id    id
+     * @param id id
      * @return user info
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/uc/auth/info")
-    ResponseData getUserInfo(@RequestHeader("token") String token, @RequestParam("id") Long id);
+    @RequestLine("GET /uc/auth/info?id={id}")
+    ResponseData getUserInfo(@HeaderMap Map<String, Object> map, @Param("id") Long id);
 
 }

@@ -1,14 +1,16 @@
 package com.ht.base.controller;
 
 import com.ht.base.common.ErrorResult;
-import com.ht.base.module.base.UserDetails;
+import com.ht.base.config.FeignConfig;
 import com.ht.base.dto.ResponseData;
+import com.ht.base.module.base.UserDetails;
 import com.ht.base.module.dto.BaseResult;
-import com.ht.base.module.dto.LoginRequest;
-import com.ht.base.service.AuthServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -21,11 +23,11 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthServer authServer;
+    private final FeignConfig feignConfig;
 
     @Autowired
-    public AuthController(AuthServer authServer) {
-        this.authServer = authServer;
+    public AuthController(FeignConfig feignConfig) {
+        this.feignConfig = feignConfig;
     }
 
 //    @PostMapping("/login")
@@ -36,13 +38,17 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public Object logout(@RequestHeader String token) {
-        ResponseData logout = authServer.logout(token);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        ResponseData logout = feignConfig.authService().logout(map);
         return BaseResult.create(logout.getCode(), logout.getMessage(), logout.getData());
     }
 
     @GetMapping("/info")
     public Object getUserInfo(@RequestHeader String token, @RequestParam(defaultValue = "-100") Long id) {
-        ResponseData userInfo = authServer.getUserInfo(token, id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        ResponseData userInfo = feignConfig.authService().getUserInfo(map, id);
         return BaseResult.create(userInfo.getCode(), userInfo.getMessage(), userInfo.getData());
     }
 

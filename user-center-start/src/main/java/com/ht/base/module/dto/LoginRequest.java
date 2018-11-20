@@ -1,5 +1,6 @@
 package com.ht.base.module.dto;
 
+import feign.Param;
 import lombok.Builder;
 import lombok.Data;
 

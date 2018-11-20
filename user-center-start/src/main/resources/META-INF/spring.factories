@@ -1,5 +1,3 @@
-org.springframework.cloud.openfeign=\
-  com.ht.base.service.AuthServer
 # �Զ����ע���Զ���Ҫʵ��DeferredImportSelector,������ʵ����
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.ht.base.UserCenterAuthConfiguratin,\

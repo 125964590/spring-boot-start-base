@@ -5,7 +5,6 @@ import com.ht.base.filter.UserPasswordFilter;
 import com.ht.base.module.properties.UserCenterProperties;
 import com.ht.base.provider.RedisAuthenticationProvider;
 import com.ht.base.provider.UserPasswordProvider;
-import com.ht.base.service.AuthServer;
 import com.ht.base.utils.RedisTokenUtils;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LogoutSuccessHandler logoutHandler;
 
-    private final AuthServer authServer;
+    private final FeignConfig feignConfig;
 
     private final UserCenterProperties userCenterProperties;
 
@@ -43,10 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RedisTokenUtils redisTokenUtils;
 
-    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, AuthServer authServer, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils) {
+    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, FeignConfig feignConfig, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils) {
         this.userCenterProperties = userCenterProperties;
         this.logoutHandler = logoutHandler;
-        this.authServer = authServer;
+        this.feignConfig = feignConfig;
         this.serverProperties = serverProperties;
         this.redisTokenUtils = redisTokenUtils;
     }
@@ -73,12 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserPasswordProvider userPasswordProvider() {
-        return new UserPasswordProvider(authServer, redisTokenUtils);
+        return new UserPasswordProvider(feignConfig.authService(), redisTokenUtils);
     }
 
     @Bean
     public RedisAuthenticationProvider redisAuthenticationProvider() {
-        return new RedisAuthenticationProvider();
+        return new RedisAuthenticationProvider(redisTokenUtils, serverProperties);
     }
 
     /**
