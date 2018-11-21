@@ -88,5 +88,10 @@
             <artifactId>user-common</artifactId>
             <version>${default.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.huatu.commons</groupId>
+            <artifactId>common-base</artifactId>
+            <version>1.0-${project.environment}-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

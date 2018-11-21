@@ -4,7 +4,7 @@ import com.ht.base.common.ErrorResult;
 import com.ht.base.config.FeignConfig;
 import com.ht.base.dto.ResponseData;
 import com.ht.base.module.base.UserDetails;
-import com.ht.base.module.dto.BaseResult;
+import com.huatu.common.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class AuthController {
 //    @PostMapping("/login")
 //    public Object login(@RequestBody LoginRequest loginRequest) {
 //        ResponseData login = authServer.login(loginRequest);
-//        return BaseResult.create(login.getCode(), login.getMessage(), login.getData());
+//        return BaseResponse.create(login.getCode(), login.getMessage(), login.getData());
 //    }
 
     @DeleteMapping("/logout")
@@ -41,7 +41,7 @@ public class AuthController {
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
         ResponseData logout = feignConfig.authService().logout(map);
-        return BaseResult.create(logout.getCode(), logout.getMessage(), logout.getData());
+        return BaseResponse.create(logout.getCode(), logout.getMessage(), logout.getData());
     }
 
     @GetMapping("/info")
@@ -49,19 +49,13 @@ public class AuthController {
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
         ResponseData userInfo = feignConfig.authService().getUserInfo(map, id);
-        return BaseResult.create(userInfo.getCode(), userInfo.getMessage(), userInfo.getData());
+        return BaseResponse.create(userInfo.getCode(), userInfo.getMessage(), userInfo.getData());
     }
 
     @GetMapping("/login/page")
     @ResponseStatus(FORBIDDEN)
     public Object redirectLogin() {
         return ErrorResult.create(403, "请跳转登录页");
-    }
-
-    @GetMapping("/login/success")
-    public Object loginSuccess() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return BaseResult.create(userDetails.getToken());
     }
 
     @GetMapping("/error")

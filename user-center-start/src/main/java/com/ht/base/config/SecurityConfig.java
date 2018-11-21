@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -42,12 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RedisTokenUtils redisTokenUtils;
 
-    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, FeignConfig feignConfig, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils) {
+    private final AuthenticationSuccessHandler successHandler;
+
+    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, FeignConfig feignConfig, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils, AuthenticationSuccessHandler successHandler) {
         this.userCenterProperties = userCenterProperties;
         this.logoutHandler = logoutHandler;
         this.feignConfig = feignConfig;
         this.serverProperties = serverProperties;
         this.redisTokenUtils = redisTokenUtils;
+        this.successHandler = successHandler;
     }
 
 
@@ -55,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UserPasswordFilter userPasswordFilter = new UserPasswordFilter();
         //add authentication manager
         userPasswordFilter.setAuthenticationManager(authenticationManager);
-        userPasswordFilter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/auth/login/success"));
+        userPasswordFilter.setAuthenticationSuccessHandler(successHandler);
         //set login error page
         userPasswordFilter.setAuthenticationFailureHandler(new SimpleUrlAuthenticationFailureHandler("/auth/login/error"));
         return userPasswordFilter;
@@ -102,7 +106,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/auth/login/page")
-                .loginProcessingUrl("/auth/login/success")
                 .and()
                 .logout()
                 .logoutUrl("/auth/logout")

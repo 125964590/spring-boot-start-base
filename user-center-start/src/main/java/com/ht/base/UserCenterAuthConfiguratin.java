@@ -3,6 +3,7 @@ package com.ht.base;
 import com.ht.base.config.FeignConfig;
 import com.ht.base.config.SecurityConfig;
 import com.ht.base.handler.LogoutHandler;
+import com.ht.base.handler.SuccessLoginHandler;
 import com.ht.base.module.properties.UserCenterProperties;
 import com.ht.base.utils.RedisTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +40,18 @@ public class UserCenterAuthConfiguratin {
     }
 
     @Bean
+    public SuccessLoginHandler successLoginHandler() {
+        return new SuccessLoginHandler();
+    }
+
+    @Bean
     public FeignConfig feignConfig() {
         return new FeignConfig(userCenterProperties);
     }
 
     @Bean
     @ConditionalOnBean(FeignConfig.class)
-    public SecurityConfig securityConfig(RedisTokenUtils redisTokenUtils, FeignConfig feignConfig,LogoutHandler logoutHandler) {
-        return new SecurityConfig(userCenterProperties, logoutHandler, feignConfig, serverProperties, redisTokenUtils);
+    public SecurityConfig securityConfig(RedisTokenUtils redisTokenUtils, FeignConfig feignConfig,LogoutHandler logoutHandler,SuccessLoginHandler successLoginHandler) {
+        return new SecurityConfig(userCenterProperties, logoutHandler, feignConfig, serverProperties, redisTokenUtils,successLoginHandler);
     }
 }
