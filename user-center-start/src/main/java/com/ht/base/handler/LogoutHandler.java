@@ -30,6 +30,7 @@ public class LogoutHandler implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String token = request.getParameter(TOKEN);
         ResponseData logout = authServer.logout(token);
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(logout));
     }
 }
