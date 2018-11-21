@@ -1,6 +1,5 @@
 package com.ht.base.filter;
 
-import com.ht.base.module.base.UserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -36,21 +35,17 @@ public class UserPasswordFilter extends AbstractAuthenticationProcessingFilter {
         if (password == null) {
             password = "";
         }
+        //get really user information
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 username, password);
-        Authentication authenticate = this.getAuthenticationManager().authenticate(authRequest);
-        //return user token
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) authenticate;
-        UserDetails userDetailInfo = (UserDetails) usernamePasswordAuthenticationToken.getPrincipal();
-        response.getWriter().write(userDetailInfo.getToken());
-        return authenticate;
+        return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    protected String obtainUsername(HttpServletRequest request) {
+    private String obtainUsername(HttpServletRequest request) {
         return request.getParameter(USERNAME_STRING);
     }
 
-    protected String obtainPassword(HttpServletRequest request) {
+    private String obtainPassword(HttpServletRequest request) {
         return request.getParameter(PASSWORD_STRING);
     }
 }

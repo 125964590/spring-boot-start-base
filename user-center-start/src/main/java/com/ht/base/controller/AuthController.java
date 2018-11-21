@@ -28,18 +28,6 @@ public class AuthController {
         this.authServer = authServer;
     }
 
-//    @PostMapping("/login")
-//    public Object login(@RequestBody LoginRequest loginRequest) {
-//        ResponseData login = authServer.login(loginRequest);
-//        return BaseResult.create(login.getCode(), login.getMessage(), login.getData());
-//    }
-
-    @DeleteMapping("/logout")
-    public Object logout(@RequestHeader String token) {
-        ResponseData logout = authServer.logout(token);
-        return BaseResult.create(logout.getCode(), logout.getMessage(), logout.getData());
-    }
-
     @GetMapping("/info")
     public Object getUserInfo(@RequestHeader String token, @RequestParam(defaultValue = "-100") Long id) {
         ResponseData userInfo = authServer.getUserInfo(token, id);
@@ -50,12 +38,6 @@ public class AuthController {
     @ResponseStatus(FORBIDDEN)
     public Object redirectLogin() {
         return ErrorResult.create(403, "请跳转登录页");
-    }
-
-    @GetMapping("/login/success")
-    public Object loginSuccess() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDetails.getToken();
     }
 
     @GetMapping("/error")

@@ -29,4 +29,14 @@ public class Test {
     public String test04() {
         return "success4444";
     }
+
+    @GetMapping("/backed/advice")
+    public String test05() {
+        return "lol5555";
+    }
+
+    @GetMapping("/backed/lol")
+    public String test06() {
+        return "lol6666";
+    }
 }

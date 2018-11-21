@@ -21,11 +21,11 @@ public class BaseResult implements Result {
         this.message = message;
     }
 
-    public final static BaseResult create(Object message) {
+    public static BaseResult create(Object message) {
         return new BaseResult(message);
     }
 
-    public final static BaseResult create(int code, Object message, Object data) {
+    public static BaseResult create(int code, Object message, Object data) {
         return new BaseResult(code, message, data);
     }
 

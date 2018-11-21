@@ -4,8 +4,6 @@ import com.ht.base.module.base.UserDetails;
 import com.ht.base.token.RedisAuthenticationToken;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.utils.RedisTokenUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -16,12 +14,11 @@ import org.springframework.security.core.AuthenticationException;
  **/
 public class RedisAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private RedisTokenUtils redisTokenUtils;
+    private final RedisTokenUtils redisTokenUtils;
 
-    @Autowired
-    ServerProperties serverProperties;
-
+    public RedisAuthenticationProvider(RedisTokenUtils redisTokenUtils) {
+        this.redisTokenUtils = redisTokenUtils;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -30,6 +27,7 @@ public class RedisAuthenticationProvider implements AuthenticationProvider {
         String token = redisAuthenticationToken.getToken();
         final UserInfo userInfo = redisTokenUtils.getUserInfo(token);
         UserDetails userDetails = new UserDetails(userInfo);
+        //return really user information
         return new RedisAuthenticationToken(userDetails, userDetails.getAuthorities());
     }
 

@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.ht.base.start</groupId>
-    <artifactId>user-center-start</artifactId>
+    <artifactId>user-center-start-2.0</artifactId>
     <version>${default.version}</version>
 
     <dependencies>
@@ -49,10 +49,6 @@
                     <artifactId>httpclient</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-ribbon</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>

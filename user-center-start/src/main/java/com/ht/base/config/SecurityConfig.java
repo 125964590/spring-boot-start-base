@@ -14,8 +14,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.util.AntPathMatcher;
@@ -43,25 +43,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RedisTokenUtils redisTokenUtils;
 
-    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, AuthServer authServer, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils) {
+    private final AuthenticationSuccessHandler successHandler;
+
+    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, AuthServer authServer, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils, AuthenticationSuccessHandler successHandler) {
         this.userCenterProperties = userCenterProperties;
         this.logoutHandler = logoutHandler;
         this.authServer = authServer;
         this.serverProperties = serverProperties;
         this.redisTokenUtils = redisTokenUtils;
+        this.successHandler = successHandler;
     }
 
 
+    /**
+     * set user password filter
+     * set parent authentication manager
+     * set custom success handler
+     * set redirect page for error
+     */
     private UserPasswordFilter userPasswordFilter(AuthenticationManager authenticationManager) {
         UserPasswordFilter userPasswordFilter = new UserPasswordFilter();
         //add authentication manager
         userPasswordFilter.setAuthenticationManager(authenticationManager);
-        userPasswordFilter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/auth/login/success"));
+        userPasswordFilter.setAuthenticationSuccessHandler(successHandler);
         //set login error page
         userPasswordFilter.setAuthenticationFailureHandler(new SimpleUrlAuthenticationFailureHandler("/auth/login/error"));
         return userPasswordFilter;
     }
 
+    /**
+     * set redis authentication filter
+     * import some bean
+     */
     private RedisAuthenticationFilter redisAuthenticationFilter(AuthenticationManager authenticationManager) {
         return RedisAuthenticationFilter.builder()
                 .userCenterProperties(userCenterProperties)
@@ -78,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RedisAuthenticationProvider redisAuthenticationProvider() {
-        return new RedisAuthenticationProvider();
+        return new RedisAuthenticationProvider(redisTokenUtils);
     }
 
     /**
@@ -87,7 +100,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
-
+        /*
+         * define base support:
+         * set cors and disable csrf
+         */
         http
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
@@ -96,34 +112,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable();
-
+        /*
+         * define authentication information
+         */
         expressionInterceptUrlRegistry
                 .antMatchers("/auth/**")
                 .permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/auth/login/page")
-                .loginProcessingUrl("/auth/login/success")
                 .and()
                 .logout()
-                .logoutUrl("/auth/logout")
                 .logoutSuccessHandler(logoutHandler)
                 .and()
                 .exceptionHandling().accessDeniedPage("/auth/error")
                 .and()
                 .sessionManagement();
-
+        /*
+         * set pass paths
+         */
         expressionInterceptUrlRegistry
                 .antMatchers(userCenterProperties.getAuthPassPaths()).permitAll();
-
+        /*
+         * set auth paths
+         */
         for (String path : userCenterProperties.getAuthPaths()) {
             expressionInterceptUrlRegistry.antMatchers(path).hasAnyRole(ROLE);
         }
-
+        /*
+         * others request path permit
+         */
         expressionInterceptUrlRegistry
                 .anyRequest()
                 .permitAll();
-
+        /*
+         * set filter
+         */
         http
                 .addFilterBefore(userPasswordFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(redisAuthenticationFilter(authenticationManager()), UserPasswordFilter.class);

@@ -18,8 +18,6 @@ import static com.ht.base.module.base.AuthConstant.ROLE;
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private UserInfo userInfo;
 
-    private String token;
-
     public UserDetails(UserInfo userInfo) {
         this.userInfo = userInfo;
     }

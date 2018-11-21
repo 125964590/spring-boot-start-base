@@ -27,7 +27,7 @@ public interface AuthServer {
      * @param token token
      * @return success
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/uc/auth/login")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/uc/auth/logout")
     ResponseData logout(@RequestHeader("token") String token);
 
     /**
