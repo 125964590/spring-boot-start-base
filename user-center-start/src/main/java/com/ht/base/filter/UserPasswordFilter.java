@@ -38,12 +38,7 @@ public class UserPasswordFilter extends AbstractAuthenticationProcessingFilter {
         }
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 username, password);
-        Authentication authenticate = this.getAuthenticationManager().authenticate(authRequest);
-        //return user token
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) authenticate;
-        UserDetails userDetailInfo = (UserDetails) usernamePasswordAuthenticationToken.getPrincipal();
-        response.getWriter().write(userDetailInfo.getToken());
-        return authenticate;
+        return this.getAuthenticationManager().authenticate(authRequest);
     }
 
     protected String obtainUsername(HttpServletRequest request) {

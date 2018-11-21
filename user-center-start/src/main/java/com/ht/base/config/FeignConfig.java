@@ -22,6 +22,6 @@ public class FeignConfig {
         return Feign.builder()
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
-                .target(AuthServer.class, "http://localhost:11197");
+                .target(AuthServer.class, userCenterProperties.getUrl());
     }
 }

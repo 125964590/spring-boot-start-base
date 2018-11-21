@@ -22,12 +22,16 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @EnableConfigurationProperties(UserCenterProperties.class)
 @ConditionalOnProperty(value = "user-center.enable", havingValue = "true", matchIfMissing = true)
 @Configuration
-public class UserCenterAuthConfiguratin {
+public class UserCenterAuthConfiguration {
+
+    private final UserCenterProperties userCenterProperties;
+    private final ServerProperties serverProperties;
 
     @Autowired
-    private UserCenterProperties userCenterProperties;
-    @Autowired
-    private ServerProperties serverProperties;
+    public UserCenterAuthConfiguration(UserCenterProperties userCenterProperties, ServerProperties serverProperties) {
+        this.userCenterProperties = userCenterProperties;
+        this.serverProperties = serverProperties;
+    }
 
     @Bean
     public RedisTokenUtils redisTokenUtils(StringRedisTemplate stringRedisTemplate) {

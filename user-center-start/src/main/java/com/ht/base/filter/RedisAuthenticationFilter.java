@@ -9,9 +9,11 @@ import com.ht.base.user.module.security.Menu;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.user.utils.TreeUtil;
 import com.ht.base.utils.RedisTokenUtils;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -35,6 +37,7 @@ import java.util.List;
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
+@AllArgsConstructor
 @Builder
 public class RedisAuthenticationFilter extends OncePerRequestFilter {
 
@@ -43,6 +46,8 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
     static {
         basePassPath.add("/auth/**");
     }
+
+    private static Boolean result = false;
 
     private RedisTokenUtils redisTokenUtils;
 
@@ -84,19 +89,23 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         List<Menu> childrenTree = TreeUtil.findChildrenTree(userInfo.getMenus(), menu);
         MyAssert.BaseAssert(() -> !CollectionUtils.isEmpty(childrenTree), new MyException(NegativeResult.NO_POWER));
         //check url
+        result = false;
         MyAssert.BaseAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method), new MyException(NegativeResult.NO_POWER));
     }
 
     private boolean recursiveCheckUrl(List<Menu> childrenTree, String localRequestPath, String method) {
         for (Menu menu : childrenTree) {
-            if (pathMatcher.match(menu.getRequestPath(), localRequestPath) && menu.getRequestMethod().toUpperCase().equals(method)) {
-                return true;
+            System.out.println(1);
+            if (StringUtils.isNotEmpty(menu.getRequestPath()) && StringUtils.isNotEmpty(menu.getRequestMethod())) {
+                if (pathMatcher.match(menu.getRequestPath(), localRequestPath) && menu.getRequestMethod().toUpperCase().equals(method)) {
+                    result = true;
+                }
             }
             if (menu.getChildren().size() != 0 && menu.getChildren() != null) {
-                return recursiveCheckUrl(menu.getChildren(), localRequestPath, method);
+                recursiveCheckUrl(menu.getChildren(), localRequestPath, method);
             }
         }
-        return false;
+        return result;
     }
 
     private boolean checkRequestIntoTheFilter(String requestPath, String... authRequestPaths) {
