@@ -12,27 +12,32 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * @author zhengyi
  * @date 11/19/18 11:29 AM
  **/
+@Configuration
 @EnableFeignClients
 @EnableConfigurationProperties(UserCenterProperties.class)
 @ConditionalOnProperty(value = "user-center.enable", havingValue = "true", matchIfMissing = true)
-public class UserCenterAuthConfiguratin {
+public class UserCenterAuthConfiguration {
+
+    private final AuthServer authServer;
+    private final UserCenterProperties userCenterProperties;
+    private final ServerProperties serverProperties;
 
     @Autowired
-    private AuthServer authServer;
-    @Autowired
-    private UserCenterProperties userCenterProperties;
-    @Autowired
-    private ServerProperties serverProperties;
+    public UserCenterAuthConfiguration(AuthServer authServer, UserCenterProperties userCenterProperties, ServerProperties serverProperties) {
+        this.authServer = authServer;
+        this.userCenterProperties = userCenterProperties;
+        this.serverProperties = serverProperties;
+    }
 
     @Bean
-    private SuccessLoginHandler successLoginHandler() {
+    public SuccessLoginHandler successLoginHandler() {
         return new SuccessLoginHandler();
     }
 
@@ -42,8 +47,8 @@ public class UserCenterAuthConfiguratin {
     }
 
     @Bean
-    public SecurityConfig securityConfig(RedisTokenUtils redisTokenUtils,LogoutHandler logoutHandler,SuccessLoginHandler successLoginHandler) {
-        return new SecurityConfig(userCenterProperties, logoutHandler, authServer, serverProperties, redisTokenUtils,successLoginHandler);
+    public SecurityConfig securityConfig(RedisTokenUtils redisTokenUtils, LogoutHandler logoutHandler, SuccessLoginHandler successLoginHandler) {
+        return new SecurityConfig(userCenterProperties, logoutHandler, authServer, serverProperties, redisTokenUtils, successLoginHandler);
     }
 
     @Bean
