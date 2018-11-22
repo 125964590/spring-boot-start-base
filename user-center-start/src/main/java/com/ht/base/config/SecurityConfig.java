@@ -123,6 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/auth/login/page")
                 .and()
                 .logout()
+                .logoutUrl("/auth/logout")
                 .logoutSuccessHandler(logoutHandler)
                 .and()
                 .exceptionHandling().accessDeniedPage("/auth/error")
