@@ -3,6 +3,7 @@ package com.ht.base.service;
 import com.ht.base.dto.ResponseData;
 import com.ht.base.module.dto.LoginRequest;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2018/9/8 9:32 PM
  **/
 @FeignClient("user-center")
+@Service
 public interface AuthServer {
 
     /**

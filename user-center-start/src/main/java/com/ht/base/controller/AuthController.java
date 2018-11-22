@@ -1,13 +1,11 @@
 package com.ht.base.controller;
 
 import com.ht.base.common.ErrorResult;
-import com.ht.base.module.base.UserDetails;
+import com.ht.base.dto.BaseResponse;
 import com.ht.base.dto.ResponseData;
 import com.ht.base.module.dto.BaseResult;
-import com.ht.base.module.dto.LoginRequest;
 import com.ht.base.service.AuthServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -44,5 +42,11 @@ public class AuthController {
     @ResponseStatus(UNAUTHORIZED)
     public Object errorPage() {
         return ErrorResult.create(401, "没有访问权限");
+    }
+
+    @DeleteMapping("/logout")
+    public Object logout(@RequestHeader String token) {
+        ResponseData logout = authServer.logout(token);
+        return BaseResponse.create(logout.getCode(), logout.getMessage(), logout.getData());
     }
 }
