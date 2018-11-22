@@ -105,9 +105,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * set cors and disable csrf
          */
         http
-                .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .and()
                 .cors()
                 .and()
                 .csrf()
@@ -159,17 +156,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(userPasswordProvider()).authenticationProvider(redisAuthenticationProvider());
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        //domain name
-        configuration.addAllowedOrigin("*");
-        //head information
-        configuration.addAllowedHeader("*");
-        //method type
-        configuration.addAllowedMethod("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        //domain name
+//        configuration.addAllowedOrigin("*");
+//        //head information
+//        configuration.addAllowedHeader("*");
+//        //method type
+//        configuration.addAllowedMethod("*");
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }
