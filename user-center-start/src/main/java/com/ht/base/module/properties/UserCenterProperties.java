@@ -25,7 +25,7 @@ public class UserCenterProperties {
     /**
      * need authenticated request
      */
-    private String[] authPaths = {"/back/**"};
+    private String[] authPaths = {"/null"};
 
     /**
      * http://*******

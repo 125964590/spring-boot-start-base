@@ -2,10 +2,11 @@ package com.ht.base.config;
 
 import com.ht.base.filter.RedisAuthenticationFilter;
 import com.ht.base.filter.UserPasswordFilter;
+import com.ht.base.handler.FailLoginHandler;
 import com.ht.base.module.properties.UserCenterProperties;
 import com.ht.base.provider.RedisAuthenticationProvider;
 import com.ht.base.provider.UserPasswordProvider;
-import com.ht.base.service.AuthServer;
+import com.ht.base.service.UserDetailsServer;
 import com.ht.base.utils.RedisTokenUtils;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,14 +16,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static com.ht.base.module.base.AuthConstant.ROLE;
 
@@ -35,8 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LogoutSuccessHandler logoutHandler;
 
-    private final AuthServer authServer;
-
     private final UserCenterProperties userCenterProperties;
 
     private final ServerProperties serverProperties;
@@ -45,13 +39,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationSuccessHandler successHandler;
 
-    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, AuthServer authServer, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils, AuthenticationSuccessHandler successHandler) {
+
+    private final FailLoginHandler failLoginHandler;
+
+    private final UserDetailsServer userDetailsServer;
+
+    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils, AuthenticationSuccessHandler successHandler, FailLoginHandler failLoginHandler, UserDetailsServer userDetailsServer) {
         this.userCenterProperties = userCenterProperties;
         this.logoutHandler = logoutHandler;
-        this.authServer = authServer;
         this.serverProperties = serverProperties;
         this.redisTokenUtils = redisTokenUtils;
         this.successHandler = successHandler;
+        this.failLoginHandler = failLoginHandler;
+        this.userDetailsServer = userDetailsServer;
     }
 
 
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         userPasswordFilter.setAuthenticationManager(authenticationManager);
         userPasswordFilter.setAuthenticationSuccessHandler(successHandler);
         //set login error page
-        userPasswordFilter.setAuthenticationFailureHandler(new SimpleUrlAuthenticationFailureHandler("/auth/login/error"));
+        userPasswordFilter.setAuthenticationFailureHandler(failLoginHandler);
         return userPasswordFilter;
     }
 
@@ -86,8 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserPasswordProvider userPasswordProvider() {
-        return new UserPasswordProvider(authServer, redisTokenUtils);
+        return new UserPasswordProvider(userDetailsServer);
     }
+
 
     @Bean
     public RedisAuthenticationProvider redisAuthenticationProvider() {
@@ -120,7 +121,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/auth/login/page")
                 .and()
                 .logout()
-                .logoutUrl("/auth/logout")
                 .logoutSuccessHandler(logoutHandler)
                 .and()
                 .exceptionHandling().accessDeniedPage("/auth/error")
@@ -156,17 +156,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(userPasswordProvider()).authenticationProvider(redisAuthenticationProvider());
     }
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        //domain name
-//        configuration.addAllowedOrigin("*");
-//        //head information
-//        configuration.addAllowedHeader("*");
-//        //method type
-//        configuration.addAllowedMethod("*");
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 }
