@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
- * @author zhengy`i
+ * @author zhengyi
  * @date 11/16/18 9:30 PM
  **/
 public class RedisTokenUtils {
