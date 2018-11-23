@@ -1,7 +1,7 @@
 package com.ht.base.filter;
 
+import com.ht.base.exception.BadAuthenticationException;
 import com.ht.base.exception.MyAssert;
-import com.ht.base.exception.MyException;
 import com.ht.base.module.properties.UserCenterProperties;
 import com.ht.base.token.RedisAuthenticationToken;
 import com.ht.base.user.constant.result.NegativeResult;
@@ -87,15 +87,15 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         menu.setRequestPath(localRequestPath);
         assert userInfo != null;
         List<Menu> childrenTree = TreeUtil.findChildrenTree(userInfo.getMenus(), menu);
-        MyAssert.BaseAssert(() -> !CollectionUtils.isEmpty(childrenTree), new MyException(NegativeResult.NO_POWER));
+
+        MyAssert.RunTimeAssert(() -> !CollectionUtils.isEmpty(childrenTree),new BadAuthenticationException(NegativeResult.NO_POWER));
         //check url
         result = false;
-        MyAssert.BaseAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method), new MyException(NegativeResult.NO_POWER));
+        MyAssert.RunTimeAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method),new BadAuthenticationException(NegativeResult.NO_POWER));
     }
 
     private boolean recursiveCheckUrl(List<Menu> childrenTree, String localRequestPath, String method) {
         for (Menu menu : childrenTree) {
-            System.out.println(1);
             if (StringUtils.isNotEmpty(menu.getRequestPath()) && StringUtils.isNotEmpty(menu.getRequestMethod())) {
                 if (pathMatcher.match(menu.getRequestPath(), localRequestPath) && menu.getRequestMethod().toUpperCase().equals(method)) {
                     result = true;

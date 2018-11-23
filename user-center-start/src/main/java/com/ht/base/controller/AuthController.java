@@ -3,10 +3,8 @@ package com.ht.base.controller;
 import com.ht.base.common.ErrorResult;
 import com.ht.base.config.FeignConfig;
 import com.ht.base.dto.ResponseData;
-import com.ht.base.module.base.UserDetails;
 import com.huatu.common.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

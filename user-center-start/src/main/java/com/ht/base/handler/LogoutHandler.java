@@ -3,6 +3,7 @@ package com.ht.base.handler;
 import com.alibaba.fastjson.JSON;
 import com.ht.base.config.FeignConfig;
 import com.ht.base.dto.ResponseData;
+import com.ht.base.proxy.JsonResponseProxy;
 import com.ht.base.service.AuthServer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -37,6 +38,6 @@ public class LogoutHandler implements LogoutSuccessHandler {
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
         ResponseData logout = feignConfig.authService().logout(map);
-        response.getWriter().write(JSON.toJSONString(logout));
+        JsonResponseProxy.setJsonRetuen(response, () -> (JSON.toJSONString(logout)));
     }
 }
