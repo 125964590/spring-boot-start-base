@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  con.ht.base.start.security.UserCenterAuthConfiguration,\
+  con.ht.base.start.security.controller.AuthController
