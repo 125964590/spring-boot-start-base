@@ -1,8 +1,8 @@
 package con.ht.base.start.security.controller;
 
-import com.ht.base.common.ErrorResult;
-import com.ht.base.dto.BaseResponse;
 import com.ht.base.dto.ResponseData;
+import com.huatu.common.BaseResponse;
+import com.huatu.common.ErrorResult;
 import con.ht.base.start.security.config.FeignConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +27,6 @@ public class AuthController {
     public AuthController(FeignConfig feignConfig) {
         this.feignConfig = feignConfig;
     }
-
-//    @PostMapping("/login")
-//    public Object login(@RequestBody LoginRequest loginRequest) {
-//        ResponseData login = authServer.login(loginRequest);
-//        return BaseResponse.create(login.getCode(), login.getMessage(), login.getData());
-//    }
 
     @DeleteMapping("/logout")
     public Object logout(@RequestHeader String token) {
