@@ -1,5 +1,6 @@
 package con.ht.base.start.security;
 
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import con.ht.base.start.security.config.FeignConfig;
 import con.ht.base.start.security.config.SecurityConfig;
 import con.ht.base.start.security.handler.FailLoginHandler;
@@ -15,15 +16,19 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+
+import static com.ht.base.common.ApolloServiceConstant.USER_CENTER_CLIENT;
 
 /**
  * @author zhengyi
  * @date 11/19/18 11:29 AM
  **/
+@Configuration
+@EnableApolloConfig(USER_CENTER_CLIENT)
 @EnableConfigurationProperties(UserCenterProperties.class)
 @ConditionalOnProperty(value = "user-center.enable", havingValue = "true", matchIfMissing = true)
-@Configuration
 public class UserCenterAuthConfiguration {
 
     private final UserCenterProperties userCenterProperties;
@@ -36,8 +41,15 @@ public class UserCenterAuthConfiguration {
     }
 
     @Bean
-    public RedisTokenUtils redisTokenUtils(StringRedisTemplate stringRedisTemplate) {
-        return new RedisTokenUtils(stringRedisTemplate);
+    public StringRedisTemplate niubilityRedisTemplate(JedisConnectionFactory jedisConnectionFactory) {
+        StringRedisTemplate niubilityRedisTemplate = new StringRedisTemplate();
+        niubilityRedisTemplate.setConnectionFactory(jedisConnectionFactory);
+        return niubilityRedisTemplate;
+    }
+
+    @Bean
+    public RedisTokenUtils redisTokenUtils(StringRedisTemplate niubilityRedisTemplate) {
+        return new RedisTokenUtils(niubilityRedisTemplate);
     }
 
     @Bean

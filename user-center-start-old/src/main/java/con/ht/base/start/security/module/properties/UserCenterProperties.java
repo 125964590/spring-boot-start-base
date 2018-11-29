@@ -32,6 +32,8 @@ public class UserCenterProperties {
      */
     private String url;
 
+    /**
+     * default context path
+     */
     private String path = "/";
-
 }

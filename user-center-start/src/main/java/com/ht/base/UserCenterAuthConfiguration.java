@@ -15,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
@@ -64,8 +65,15 @@ public class UserCenterAuthConfiguration {
     }
 
     @Bean
-    public RedisTokenUtils redisTokenUtils(StringRedisTemplate stringRedisTemplate) {
-        return new RedisTokenUtils(stringRedisTemplate);
+    public StringRedisTemplate niubilityRedisTemplate(JedisConnectionFactory jedisConnectionFactory) {
+        StringRedisTemplate niubilityRedisTemplate = new StringRedisTemplate();
+        niubilityRedisTemplate.setConnectionFactory(jedisConnectionFactory);
+        return niubilityRedisTemplate;
+    }
+
+    @Bean
+    public RedisTokenUtils redisTokenUtils(StringRedisTemplate niubilityRedisTemplate) {
+        return new RedisTokenUtils(niubilityRedisTemplate);
     }
 
 
