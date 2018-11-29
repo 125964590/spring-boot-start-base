@@ -32,4 +32,9 @@ public class UserCenterProperties {
      */
     private String url;
 
+    /**
+     * cors
+     */
+    private boolean cors = true;
+
 }

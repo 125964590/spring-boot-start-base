@@ -36,4 +36,9 @@ public class UserCenterProperties {
      * default context path
      */
     private String path = "/";
+
+    /**
+     * cors
+     */
+    private boolean cors = true;
 }
