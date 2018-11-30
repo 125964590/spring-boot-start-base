@@ -3,6 +3,7 @@ package com.ht.base.start.swagger;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -12,37 +13,33 @@ import java.util.List;
 public class SwaggerProperties {
 
     /**
-     * 是否开启swagger
+     * enable swagger
      **/
-    private Boolean enabled;
+    private Boolean enabled = true;
     /**
-     * 分组名字
+     * group name
      */
     private String groupName = "郑毅我爱你";
     /**
-     * 扫描路径
+     * package scan path (no *)
      */
-    private String path = "/**";
+    private String path = "com.demo";
     /**
-     * 标题
+     * title
      **/
-    private String title = "";
+    private String title = "我曹牛逼";
     /**
-     * 描述
+     * description
      **/
-    private String description = "";
+    private String description = "6666666666666";
     /**
-     * 版本
+     * version
      **/
-    private String version = "";
+    private String version = "v 0.0.1";
     /**
-     * 忽略的参数类型
+     * ignored parameter types
      **/
     private List<Class> ignoredParameterTypes = null;
-
-    public String lol(){
-        return "ll";
-    }
 
 
 }
