@@ -1,13 +1,4 @@
-user-center:
-  enable: true
-  url: http://192.168.100.22:11197
-  ribbon:
-    listOfServers: http://192.168.100.22:11197
-  auth-pass-paths:
-    - /back/lol
-    - /test
-  auth-paths:
-   - /back/**
+user-c
 spring:
   output:
     ansi:
