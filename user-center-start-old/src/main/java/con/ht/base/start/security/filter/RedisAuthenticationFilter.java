@@ -67,7 +67,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         //get local request url and method
         String method = request.getMethod();
         String requestPath = request.getServletPath();
-        if (userCenterProperties != null && checkRequestIntoTheFilter(requestPath, userCenterProperties.getAuthPaths())) {
+        if (userCenterProperties != null && checkRequestIntoTheFilter(requestPath)) {
             // get user info
             String token = request.getHeader("token");
             Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(token));
@@ -88,10 +88,10 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         assert userInfo != null;
         List<Menu> childrenTree = TreeUtil.findChildrenTree(userInfo.getMenus(), menu);
 
-        MyAssert.RunTimeAssert(() -> !CollectionUtils.isEmpty(childrenTree),new BadAuthenticationException(NegativeResult.NO_POWER));
+        MyAssert.RunTimeAssert(() -> !CollectionUtils.isEmpty(childrenTree), new BadAuthenticationException(NegativeResult.NO_POWER));
         //check url
         result = false;
-        MyAssert.RunTimeAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method),new BadAuthenticationException(NegativeResult.NO_POWER));
+        MyAssert.RunTimeAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method), new BadAuthenticationException(NegativeResult.NO_POWER));
     }
 
     private boolean recursiveCheckUrl(List<Menu> childrenTree, String localRequestPath, String method) {
@@ -108,10 +108,14 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         return result;
     }
 
-    private boolean checkRequestIntoTheFilter(String requestPath, String... authRequestPaths) {
-        boolean matchProperties = Arrays.stream(authRequestPaths).anyMatch(authPath -> pathMatcher.match(authPath, requestPath));
-        boolean matchBase = basePassPath.stream().anyMatch(basePath -> pathMatcher.match(basePath, requestPath));
-        return matchProperties;
+    private boolean checkRequestIntoTheFilter(String requestPath) {
+        String[] authPassPaths = userCenterProperties.getAuthPassPaths();
+        boolean matchPassPath = Arrays.stream(authPassPaths).anyMatch(authPassPath -> pathMatcher.match(authPassPath, requestPath));
+        if (matchPassPath) {
+            return false;
+        }
+        String[] authPaths = userCenterProperties.getAuthPaths();
+        return Arrays.stream(authPaths).anyMatch(authPath -> pathMatcher.match(authPath, requestPath));
     }
 
 }

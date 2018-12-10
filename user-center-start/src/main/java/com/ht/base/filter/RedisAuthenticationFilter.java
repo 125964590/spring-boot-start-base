@@ -41,12 +41,6 @@ import java.util.List;
 @Builder
 public class RedisAuthenticationFilter extends OncePerRequestFilter {
 
-    final static List<String> basePassPath = new LinkedList<>();
-
-    static {
-        basePassPath.add("/auth/**");
-    }
-
     private static Boolean result = false;
 
     private RedisTokenUtils redisTokenUtils;
@@ -67,7 +61,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         //get local request url and method
         String method = request.getMethod();
         String requestPath = request.getServletPath();
-        if (userCenterProperties != null && checkRequestIntoTheFilter(requestPath, userCenterProperties.getAuthPaths())) {
+        if (userCenterProperties != null && checkRequestIntoTheFilter(requestPath)) {
             // get user info
             String token = request.getHeader("token");
             Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(token));
@@ -108,10 +102,14 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         return result;
     }
 
-    private boolean checkRequestIntoTheFilter(String requestPath, String... authRequestPaths) {
-        boolean matchProperties = Arrays.stream(authRequestPaths).anyMatch(authPath -> pathMatcher.match(authPath, requestPath));
-        boolean matchBase = basePassPath.stream().anyMatch(basePath -> pathMatcher.match(basePath, requestPath));
-        return matchProperties;
+    private boolean checkRequestIntoTheFilter(String requestPath) {
+        String[] authPassPaths = userCenterProperties.getAuthPassPaths();
+        boolean matchPassPath = Arrays.stream(authPassPaths).anyMatch(authPassPath -> pathMatcher.match(authPassPath, requestPath));
+        if (matchPassPath) {
+            return false;
+        }
+        String[] authPaths = userCenterProperties.getAuthPaths();
+        return Arrays.stream(authPaths).anyMatch(authPath -> pathMatcher.match(authPath, requestPath));
     }
 
 }
