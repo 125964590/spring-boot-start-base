@@ -1,0 +1,147 @@
+package com.ht.base.start.security.config;
+
+import com.ht.base.start.security.UserCenterAuthConfiguration;
+import com.ht.base.start.security.filter.RedisAuthenticationFilter;
+import com.ht.base.start.security.filter.UserPasswordFilter;
+import com.ht.base.start.security.handler.FailLoginHandler;
+import com.ht.base.start.security.handler.LogoutHandler;
+import com.ht.base.start.security.handler.SuccessLoginHandler;
+import com.ht.base.start.security.module.properties.UserCenterProperties;
+import com.ht.base.start.security.provider.RedisAuthenticationProvider;
+import com.ht.base.start.security.provider.UserPasswordProvider;
+import com.ht.base.start.security.service.UserDetailsServer;
+import com.ht.base.start.security.utils.RedisTokenUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.util.AntPathMatcher;
+
+import static com.ht.base.start.security.module.base.AuthConstant.ROLE;
+
+
+/**
+ * @author zhengyi
+ * @date 2018/9/11 3:28 PM
+ **/
+@Configuration
+@AutoConfigureAfter(UserCenterAuthConfiguration.class)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final LogoutSuccessHandler logoutHandler;
+
+    private final UserCenterProperties userCenterProperties;
+
+    private final ServerProperties serverProperties;
+
+    private final RedisTokenUtils redisTokenUtils;
+
+    private final AuthenticationSuccessHandler successHandler;
+
+    private final FailLoginHandler failLoginHandler;
+
+    private final UserDetailsServer userDetailsServer;
+
+    private final FeignConfig feignConfig;
+
+    @Autowired
+    public SecurityConfig(UserCenterProperties userCenterProperties, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils, UserDetailsServer userDetailsServer, FeignConfig feignConfig) {
+        this.userCenterProperties = userCenterProperties;
+        this.logoutHandler = new LogoutHandler(feignConfig);
+        this.serverProperties = serverProperties;
+        this.redisTokenUtils = redisTokenUtils;
+        this.successHandler = new SuccessLoginHandler();
+        this.failLoginHandler = new FailLoginHandler();
+        this.userDetailsServer = userDetailsServer;
+        this.feignConfig = feignConfig;
+    }
+
+
+    private UserPasswordFilter userPasswordFilter(AuthenticationManager authenticationManager) {
+        UserPasswordFilter userPasswordFilter = new UserPasswordFilter();
+        //add authentication manager
+        userPasswordFilter.setAuthenticationManager(authenticationManager);
+        userPasswordFilter.setAuthenticationSuccessHandler(successHandler);
+        //set login error page
+        userPasswordFilter.setAuthenticationFailureHandler(failLoginHandler);
+        return userPasswordFilter;
+    }
+
+    private RedisAuthenticationFilter redisAuthenticationFilter(AuthenticationManager authenticationManager) {
+        return RedisAuthenticationFilter.builder()
+                .userCenterProperties(userCenterProperties)
+                .authenticationManager(authenticationManager)
+                .redisTokenUtils(redisTokenUtils)
+                .serverProperties(serverProperties)
+                .pathMatcher(new AntPathMatcher()).build();
+    }
+
+    @Bean
+    public UserPasswordProvider userPasswordProvider() {
+        return new UserPasswordProvider(userDetailsServer);
+    }
+
+    @Bean
+    public RedisAuthenticationProvider redisAuthenticationProvider() {
+        return new RedisAuthenticationProvider(feignConfig.authService());
+    }
+
+    /**
+     * TODO: need add annotation
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
+
+        http
+                .cors()
+                .and()
+                .csrf()
+                .disable();
+
+        expressionInterceptUrlRegistry
+                .antMatchers("/auth/**")
+                .permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/auth/login/page")
+                .failureUrl("/lol")
+                .and()
+                .logout()
+                .logoutUrl("/auth/logout")
+                .logoutSuccessHandler(logoutHandler)
+                .and()
+                .exceptionHandling().accessDeniedPage("/auth/error")
+                .and()
+                .sessionManagement();
+
+        expressionInterceptUrlRegistry
+                .antMatchers(userCenterProperties.getAuthPassPaths()).permitAll();
+
+        for (String path : userCenterProperties.getAuthPaths()) {
+            expressionInterceptUrlRegistry.antMatchers(path).hasAnyRole(ROLE);
+        }
+
+        expressionInterceptUrlRegistry
+                .anyRequest()
+                .permitAll();
+
+        http
+                .addFilterBefore(userPasswordFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(redisAuthenticationFilter(authenticationManager()), UserPasswordFilter.class);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(userPasswordProvider()).authenticationProvider(redisAuthenticationProvider());
+    }
+}
