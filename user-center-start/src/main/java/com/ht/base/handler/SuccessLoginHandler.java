@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
+
 /**
  * @author zhengyi
  * @date 11/21/18 1:32 PM
