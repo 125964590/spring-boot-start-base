@@ -1,14 +1,14 @@
 package com.ht.base.start.security.filter;
 
 import com.ht.base.exception.MyAssert;
+import com.ht.base.start.security.exception.BadAuthenticationException;
+import com.ht.base.start.security.module.properties.UserCenterProperties;
+import com.ht.base.start.security.token.RedisAuthenticationToken;
 import com.ht.base.start.security.utils.RedisTokenUtils;
 import com.ht.base.user.constant.result.NegativeResult;
 import com.ht.base.user.module.security.Menu;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.user.utils.TreeUtil;
-import com.ht.base.start.security.exception.BadAuthenticationException;
-import com.ht.base.start.security.module.properties.UserCenterProperties;
-import com.ht.base.start.security.token.RedisAuthenticationToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
 
 /**
  * @author zhengyi
@@ -67,7 +69,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         //get local request url and method
         String method = request.getMethod();
         String requestPath = request.getServletPath();
-        String token = request.getHeader("token");
+        String token = request.getHeader(TOKEN);
         if (StringUtils.isNotEmpty(token)) {
             // get user info
             Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(token));

@@ -14,6 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
+
 /**
  * @author zhengyi
  * @date 11/18/18 1:49 AM
@@ -32,7 +34,7 @@ public class RedisAuthenticationProvider implements AuthenticationProvider {
         //get user info
         String token = redisAuthenticationToken.getToken();
         Map<String, Object> map = new HashMap<>(16);
-        map.put("token", token);
+        map.put(TOKEN, token);
         UserInfo userInfo = JSONObject.parseObject(JSON.toJSONString(authServer.getUserInfo(map, null).getData()), UserInfo.class);
         UserDetails userDetails = new UserDetails(userInfo);
         return new RedisAuthenticationToken(userDetails, userDetails.getAuthorities());

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -29,17 +30,17 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
-    public Object logout(@RequestHeader String token) {
+    public Object logout(@RequestHeader(name = TOKEN) String token) {
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
+        map.put(TOKEN, token);
         ResponseData logout = feignConfig.authService().logout(map);
         return BaseResponse.create(logout.getCode(), logout.getMessage(), logout.getData());
     }
 
     @GetMapping("/info")
-    public Object getUserInfo(@RequestHeader String token, @RequestParam(defaultValue = "-100") Long id) {
+    public Object getUserInfo(@RequestHeader(name = TOKEN) String token, @RequestParam(defaultValue = "-100") Long id) {
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
+        map.put(TOKEN, token);
         ResponseData userInfo = feignConfig.authService().getUserInfo(map, id);
         return BaseResponse.create(userInfo.getCode(), userInfo.getMessage(), userInfo.getData());
     }

@@ -40,6 +40,6 @@ public class UserDetailsServer {
     }
 
     private String getToken(ResponseData responseData) {
-        return (String) ((LinkedHashMap) responseData.getData()).get("token");
+        return (String) ((LinkedHashMap) responseData.getData()).get(TOKEN);
     }
 }

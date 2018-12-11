@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ht.base.start.security.module.base.AuthConstant.TOKEN;
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
 
 
 /**
@@ -32,7 +32,7 @@ public class LogoutHandler implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String token = request.getHeader(TOKEN);
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
+        map.put(TOKEN, token);
         ResponseData logout = feignConfig.authService().logout(map);
         JsonResponseProxy.setJsonRetuen(response, () -> (JSON.toJSONString(logout)));
     }

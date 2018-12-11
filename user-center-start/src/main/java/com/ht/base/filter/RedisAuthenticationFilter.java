@@ -28,8 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
 
 /**
  * @author zhengyi
@@ -63,7 +64,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         String requestPath = request.getServletPath();
         if (userCenterProperties != null && checkRequestIntoTheFilter(requestPath)) {
             // get user info
-            String token = request.getHeader("token");
+            String token = request.getHeader(TOKEN);
             Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(token));
             checkRequestTree(method, requestPath, token);
             //set user info into thread local

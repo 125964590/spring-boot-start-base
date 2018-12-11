@@ -23,7 +23,7 @@ public class SuccessLoginHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<String, Object> map = new HashMap<>();
-        map.put("token", userDetails.getToken());
+        map.put(TOKEN, userDetails.getToken());
         BaseResponse baseResponse = BaseResponse.create(map);
         JsonResponseProxy.setJsonRetuen(response, () -> (JSON.toJSONString(baseResponse)));
     }
