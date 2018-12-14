@@ -6,6 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
+
+
 /**
  * @author zhengyi
  * @date 2018/9/8 9:32 PM
@@ -30,7 +33,7 @@ public interface AuthServer {
      * @return success
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/uc/auth/logout")
-    ResponseData logout(@RequestHeader("token") String token);
+    ResponseData logout(@RequestHeader(TOKEN) String token);
 
     /**
      * get user info
@@ -40,6 +43,6 @@ public interface AuthServer {
      * @return user info
      */
     @RequestMapping(method = RequestMethod.GET, value = "/uc/auth/info")
-    ResponseData getUserInfo(@RequestHeader("token") String token, @RequestParam("id") Long id);
+    ResponseData getUserInfo(@RequestHeader(TOKEN) String token, @RequestParam("id") Long id);
 
 }

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
 
+import static com.ht.base.user.constant.state.TokenState.TOKEN;
+
 /**
  * @author zhengyi
  * @date 11/23/18 1:54 PM
@@ -40,6 +42,6 @@ public class UserDetailsServer {
     }
 
     private String getToken(ResponseData responseData) {
-        return (String) ((LinkedHashMap) responseData.getData()).get("token");
+        return (String) ((LinkedHashMap) responseData.getData()).get(TOKEN);
     }
 }
