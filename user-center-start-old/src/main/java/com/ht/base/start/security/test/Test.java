@@ -1,6 +1,6 @@
-package com.ht.base.test;
+package com.ht.base.start.security.test;
 
-import com.ht.base.utils.UserTool;
+import com.ht.base.start.security.utils.UserTool;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,5 +45,4 @@ public class Test {
     public Object test07() {
         return UserTool.getUserInfo();
     }
-
 }

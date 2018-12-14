@@ -1,4 +1,4 @@
-package com.ht.base.module.base;
+package com.ht.base.start.security.module.base;
 
 import com.ht.base.user.module.security.UserInfo;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.ht.base.module.base.AuthConstant.ROLE;
+import static com.ht.base.start.security.module.base.AuthConstant.ROLE;
 
 
 /**
@@ -17,6 +17,8 @@ import static com.ht.base.module.base.AuthConstant.ROLE;
  **/
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private UserInfo userInfo;
+
+    private String token;
 
     public UserDetails(UserInfo userInfo) {
         this.userInfo = userInfo;
