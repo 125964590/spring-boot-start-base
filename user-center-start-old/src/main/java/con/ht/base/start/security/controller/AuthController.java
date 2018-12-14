@@ -1,6 +1,8 @@
 package con.ht.base.start.security.controller;
 
+import com.auth0.jwt.JWT;
 import com.ht.base.dto.ResponseData;
+import com.ht.base.user.constant.jwt.JWTTool;
 import com.huatu.common.BaseResponse;
 import com.huatu.common.ErrorResult;
 import con.ht.base.start.security.config.FeignConfig;
@@ -39,7 +41,8 @@ public class AuthController {
     @GetMapping("/info")
     public Object getUserInfo(@RequestHeader String token, @RequestParam(defaultValue = "-100") Long id) {
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
+        String redisToken = JWTTool.getToken(token);
+        map.put("token", redisToken);
         ResponseData userInfo = feignConfig.authService().getUserInfo(map, id);
         return BaseResponse.create(userInfo.getCode(), userInfo.getMessage(), userInfo.getData());
     }

@@ -2,7 +2,7 @@ package con.ht.base.start.security.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.ht.base.exception.MyAssert;
-import com.ht.base.user.constant.result.NegativeResult;
+import com.ht.base.user.constant.request.NegativeResult;
 import com.ht.base.user.module.security.UserInfo;
 import con.ht.base.start.security.exception.BadAuthenticationException;
 import org.apache.commons.lang3.StringUtils;

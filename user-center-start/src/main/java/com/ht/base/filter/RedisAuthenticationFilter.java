@@ -4,7 +4,7 @@ import com.ht.base.exception.MyAssert;
 import com.ht.base.exception.MyException;
 import com.ht.base.module.properties.UserCenterProperties;
 import com.ht.base.token.RedisAuthenticationToken;
-import com.ht.base.user.constant.result.NegativeResult;
+import com.ht.base.user.constant.request.NegativeResult;
 import com.ht.base.user.module.security.Menu;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.user.utils.TreeUtil;

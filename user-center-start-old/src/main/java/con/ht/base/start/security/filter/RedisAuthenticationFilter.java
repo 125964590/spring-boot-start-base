@@ -1,7 +1,8 @@
 package con.ht.base.start.security.filter;
 
 import com.ht.base.exception.MyAssert;
-import com.ht.base.user.constant.result.NegativeResult;
+import com.ht.base.user.constant.jwt.JWTTool;
+import com.ht.base.user.constant.request.NegativeResult;
 import com.ht.base.user.module.security.Menu;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.user.utils.TreeUtil;
@@ -41,12 +42,6 @@ import java.util.List;
 @Builder
 public class RedisAuthenticationFilter extends OncePerRequestFilter {
 
-    final static List<String> basePassPath = new LinkedList<>();
-
-    static {
-        basePassPath.add("/auth/**");
-    }
-
     private static Boolean result = false;
 
     private RedisTokenUtils redisTokenUtils;
@@ -66,12 +61,13 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //get local request url and method
         String method = request.getMethod();
+        String token = request.getHeader("token");
         String requestPath = request.getServletPath();
-        if (userCenterProperties != null && checkRequestIntoTheFilter(requestPath, userCenterProperties.getAuthPaths())) {
+        if (!checkRequestIntoTheFilter(requestPath, userCenterProperties)) {
+            String redisKey = JWTTool.getToken(token);
             // get user info
-            String token = request.getHeader("token");
-            Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(token));
-            checkRequestTree(method, requestPath, token);
+            Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
+            checkRequestTree(method, requestPath, redisKey);
             //set user info into thread local
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -88,10 +84,10 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         assert userInfo != null;
         List<Menu> childrenTree = TreeUtil.findChildrenTree(userInfo.getMenus(), menu);
 
-        MyAssert.RunTimeAssert(() -> !CollectionUtils.isEmpty(childrenTree),new BadAuthenticationException(NegativeResult.NO_POWER));
+        MyAssert.RunTimeAssert(() -> !CollectionUtils.isEmpty(childrenTree), new BadAuthenticationException(NegativeResult.NO_POWER));
         //check url
         result = false;
-        MyAssert.RunTimeAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method),new BadAuthenticationException(NegativeResult.NO_POWER));
+        MyAssert.RunTimeAssert(() -> recursiveCheckUrl(childrenTree, requestPath, method), new BadAuthenticationException(NegativeResult.NO_POWER));
     }
 
     private boolean recursiveCheckUrl(List<Menu> childrenTree, String localRequestPath, String method) {
@@ -108,12 +104,11 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         return result;
     }
 
-    private boolean checkRequestIntoTheFilter(String requestPath, String... authRequestPaths) {
-        boolean matchProperties = Arrays.stream(authRequestPaths).anyMatch(authPath -> pathMatcher.match(authPath, requestPath));
-        boolean matchBase = basePassPath.stream().anyMatch(basePath -> pathMatcher.match(basePath, requestPath));
-        return matchProperties;
+    private boolean checkRequestIntoTheFilter(String requestPath, UserCenterProperties userCenterProperties) {
+        boolean whetherValidation = Arrays.stream(userCenterProperties.getAuthPaths()).anyMatch(authPath -> pathMatcher.match(authPath, requestPath));
+        boolean whetherPass = Arrays.stream(userCenterProperties.getAuthPassPaths()).anyMatch(basePath -> pathMatcher.match(basePath, requestPath));
+        return whetherPass || !whetherValidation;
     }
-
 }
 
 

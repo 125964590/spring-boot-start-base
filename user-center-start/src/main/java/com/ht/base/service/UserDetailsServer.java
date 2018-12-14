@@ -6,7 +6,7 @@ import com.ht.base.exception.BadAuthenticationException;
 import com.ht.base.exception.MyAssert;
 import com.ht.base.module.base.UserDetails;
 import com.ht.base.module.dto.LoginRequest;
-import com.ht.base.user.constant.result.NegativeResult;
+import com.ht.base.user.constant.request.NegativeResult;
 import com.ht.base.user.module.security.UserInfo;
 import com.ht.base.utils.RedisTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;

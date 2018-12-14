@@ -3,7 +3,8 @@ package con.ht.base.start.security.service;
 import com.ht.base.common.SuccessResponse;
 import com.ht.base.dto.ResponseData;
 import com.ht.base.exception.MyAssert;
-import com.ht.base.user.constant.result.NegativeResult;
+import com.ht.base.user.constant.jwt.JWTTool;
+import com.ht.base.user.constant.request.NegativeResult;
 import com.ht.base.user.module.security.UserInfo;
 import con.ht.base.start.security.exception.BadAuthenticationException;
 import con.ht.base.start.security.module.base.UserDetails;
@@ -34,7 +35,8 @@ public class UserDetailsServer {
         ResponseData login = authServer.login(username, password);
         MyAssert.RunTimeAssert(() -> login.getCode() == SuccessResponse.SUCCESS_CODE, new BadAuthenticationException(NegativeResult.INTEGER_NEGATIVE_RESULT_MAP.get(login.getCode())));
         String token = getToken(login);
-        UserInfo userInfo = redisTokenUtils.getUserInfo(token);
+        String redisToken = JWTTool.getToken(token);
+        UserInfo userInfo = redisTokenUtils.getUserInfo(redisToken);
         return new UserDetails(userInfo);
     }
 

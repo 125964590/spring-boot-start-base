@@ -26,7 +26,7 @@ import static com.ht.base.common.ApolloServiceConstant.USER_CENTER_CLIENT;
  * @date 11/19/18 11:29 AM
  **/
 @Configuration
-@EnableApolloConfig(USER_CENTER_CLIENT)
+//@EnableApolloConfig(USER_CENTER_CLIENT)
 @EnableConfigurationProperties(UserCenterProperties.class)
 @ConditionalOnProperty(value = "user-center.enable", havingValue = "true", matchIfMissing = true)
 public class UserCenterAuthConfiguration {

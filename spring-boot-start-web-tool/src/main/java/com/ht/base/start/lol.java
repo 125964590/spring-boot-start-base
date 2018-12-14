@@ -2,10 +2,16 @@ package com.ht.base.start;
 
 import com.ht.base.common.ErrorResult;
 import com.ht.base.exception.MyException;
+import com.ht.base.start.test.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.UUID;
 
 /**
  * @author jbzm
@@ -34,4 +40,9 @@ public class lol {
         int a = 1 / 0;
     }
 
+    @GetMapping("/test03")
+    public Object test01(@Valid User user) {
+        user.setPassword(UUID.randomUUID().toString());
+        return user;
+    }
 }
