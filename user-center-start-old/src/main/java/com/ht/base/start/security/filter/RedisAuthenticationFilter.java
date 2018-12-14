@@ -71,8 +71,10 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (StringUtils.isNotEmpty(token)) {
             String redisKey = JWTTool.getToken(token);
-            Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (redisKey != null) {
+                Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(request, response);
     }
