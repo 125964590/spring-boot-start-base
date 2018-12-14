@@ -41,8 +41,7 @@ public class AuthController {
     @GetMapping("/info")
     public Object getUserInfo(@RequestHeader String token, @RequestParam(defaultValue = "-100") Long id) {
         Map<String, Object> map = new HashMap<>();
-        String redisToken = JWTTool.getToken(token);
-        map.put("token", redisToken);
+        map.put("token", token);
         ResponseData userInfo = feignConfig.authService().getUserInfo(map, id);
         return BaseResponse.create(userInfo.getCode(), userInfo.getMessage(), userInfo.getData());
     }
