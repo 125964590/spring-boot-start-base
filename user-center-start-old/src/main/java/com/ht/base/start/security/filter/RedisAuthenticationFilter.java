@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author zhengyi
@@ -60,19 +61,20 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //get local request url and method
         String method = request.getMethod();
-        String token = request.getHeader("token");
+        Optional<String> tokenOptional = Optional.ofNullable(request.getHeader("token"));
         String requestPath = request.getServletPath();
         if (!checkRequestIntoTheFilter(requestPath, userCenterProperties)) {
+            String token = tokenOptional.orElseThrow(() -> new BadAuthenticationException(NegativeResult.NO_POWER));
             String redisKey = JWTTool.getToken(token);
             // get user info
             Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
             checkRequestTree(method, requestPath, redisKey);
             //set user info into thread local
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else if (StringUtils.isNotEmpty(token)) {
-            String redisKey = JWTTool.getToken(token);
-            if (redisKey != null) {
-                Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
+        } else if (tokenOptional.isPresent()) {
+            Optional<String> redisKey = Optional.ofNullable(JWTTool.getToken(tokenOptional.get()));
+            if (redisKey.isPresent()) {
+                Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey.get()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
