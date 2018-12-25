@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>java-sdk-analysis</artifactId>
+    <artifactId>java-sdk-analysis-start</artifactId>
     <version>${default.version}</version>
 
     <dependencies>
