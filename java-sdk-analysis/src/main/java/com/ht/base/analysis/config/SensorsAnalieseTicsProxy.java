@@ -14,12 +14,12 @@ public class SensorsAnalieseTicsProxy {
     private String saServerUrl;
     private boolean saWriteData;
 
-    SensorsAnalieseTicsProxy(String saServerUrl, boolean saWriteData) {
+    public SensorsAnalieseTicsProxy(String saServerUrl, boolean saWriteData) {
         this.saServerUrl = saServerUrl;
         this.saWriteData = saWriteData;
     }
 
-    SensorsAnalytics initializeBean() {
+    public SensorsAnalytics initializeBean() {
         SensorsAnalytics sa = new SensorsAnalytics(new SensorsAnalytics.DebugConsumer(saServerUrl, saWriteData));
         addPublicProperties(sa);
         return sa;

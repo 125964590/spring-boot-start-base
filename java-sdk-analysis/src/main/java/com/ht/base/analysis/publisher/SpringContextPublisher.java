@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @author zhengyi
  * @date 2018-12-22 18:11
  **/
-@Component
 public class SpringContextPublisher implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;

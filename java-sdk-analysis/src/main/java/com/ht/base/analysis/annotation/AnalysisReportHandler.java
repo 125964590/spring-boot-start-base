@@ -9,19 +9,19 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
  * @author zhengyi
  * @date 2018-12-24 11:26
  **/
-@Component
 @Aspect
+@Async
 public class AnalysisReportHandler {
 
     private final SpringContextPublisher springContextPublisher;
 
-    @Autowired
     public AnalysisReportHandler(SpringContextPublisher springContextPublisher) {
         this.springContextPublisher = springContextPublisher;
     }
