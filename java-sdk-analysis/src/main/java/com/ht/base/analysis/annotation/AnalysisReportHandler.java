@@ -33,14 +33,20 @@ public class AnalysisReportHandler {
 
     @Before("analysisReportCut()&&@annotation(analysisReport)")
     public void doBefore(AnalysisReport analysisReport) {
-        System.out.println("开始记录->事件类型:" + analysisReport.value()+System.currentTimeMillis());
+        System.out.println("开始记录->事件类型:" + analysisReport.value() + System.currentTimeMillis());
         EventEntity.newInstance(analysisReport.value());
     }
 
     @After("analysisReportCut()")
     public void after(JoinPoint joinPoint) {
-        System.out.println("开始记录->事件类型:" + joinPoint.getStaticPart()+System.currentTimeMillis());
-        springContextPublisher.pushEvent(new AnalysisEvent(EventEntity.getInstance()));
+        System.out.println("开始记录->事件类型:" + joinPoint.getStaticPart() + System.currentTimeMillis());
+        try {
+            springContextPublisher.pushEvent(new AnalysisEvent(EventEntity.getInstance()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            EventEntity.remove();
+        }
     }
 
 }

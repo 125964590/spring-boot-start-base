@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DefaultAnalysisListener implements AnalysisListener {
     private final SensorsAnalytics sensorsAnalytics;
 
-    @Autowired
     public DefaultAnalysisListener(SensorsAnalytics sensorsAnalytics) {
         this.sensorsAnalytics = sensorsAnalytics;
     }

@@ -1,9 +1,12 @@
 package com.ht.base.analysis.model;
 
+import com.ht.base.analysis.exception.NoInstanceException;
+import com.sun.tools.classfile.Opcode;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author zhengyi
@@ -27,8 +30,8 @@ public class EventEntity {
         return propertiesMap;
     }
 
-    public static EventEntity getInstance() {
-        return eventEntityThreadLocal.get();
+    public static EventEntity getInstance() throws Exception {
+        return Optional.ofNullable(eventEntityThreadLocal.get()).orElseThrow(NoInstanceException::new);
     }
 
     public void setDistinctId(String distinctId) {
@@ -39,12 +42,8 @@ public class EventEntity {
         propertiesMap.put(key.name(), value);
     }
 
-    public static void main(String[] args) {
-        newInstance(EventType.HuaTuOnline_app_HuaTuOnline_SearchPlease);
-        Map<String, Object> properties = new HashMap();
-        properties.put("search_message_type", "test");
-        properties.put("search_keyword", "jbzm");
-        System.out.println(getInstance().toString());
+    public static void remove(){
+        eventEntityThreadLocal.remove();
     }
 
     @Override

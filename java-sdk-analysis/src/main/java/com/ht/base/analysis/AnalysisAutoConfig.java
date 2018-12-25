@@ -3,6 +3,7 @@ package com.ht.base.analysis;
 import com.ht.base.analysis.annotation.AnalysisReportHandler;
 import com.ht.base.analysis.config.SensorsAnalieseTicsProxy;
 import com.ht.base.analysis.listener.ContextClosedListener;
+import com.ht.base.analysis.listener.DefaultAnalysisListener;
 import com.ht.base.analysis.model.AnalysisProperties;
 import com.ht.base.analysis.publisher.SpringContextPublisher;
 import com.sensorsdata.analytics.javasdk.SensorsAnalytics;
@@ -43,6 +44,11 @@ public class AnalysisAutoConfig {
         SensorsAnalieseTicsProxy sensorsAnalieseTicsProxy = new SensorsAnalieseTicsProxy(analysisProperties.getSaServerUrl(), analysisProperties.isSaWriteData());
         new ContextClosedListener(sensorsAnalieseTicsProxy.initializeBean());
         return sensorsAnalieseTicsProxy.initializeBean();
+    }
+
+    @Bean
+    public DefaultAnalysisListener defaultAnalysisListener(SensorsAnalytics sensorsAnalytics) {
+        return new DefaultAnalysisListener(sensorsAnalytics);
     }
 
 }
