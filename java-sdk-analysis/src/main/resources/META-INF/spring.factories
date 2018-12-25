@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.ht.base.analysis.config.AnalysisConfig,\
+  com.ht.base.analysis.listener.DefaultAnalysisListener,\
+  com.ht.base.analysis.annotation.AnalysisReportHandler
