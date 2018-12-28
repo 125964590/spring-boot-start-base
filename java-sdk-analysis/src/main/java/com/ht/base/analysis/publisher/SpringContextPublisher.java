@@ -14,10 +14,6 @@ public class SpringContextPublisher implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    public SpringContextPublisher() {
-        System.out.println("lololoo");
-    }
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;

@@ -1,7 +1,6 @@
 package com.ht.base.analysis.model;
 
 import com.ht.base.analysis.exception.NoInstanceException;
-import com.sun.tools.classfile.Opcode;
 import lombok.Data;
 
 import java.util.HashMap;

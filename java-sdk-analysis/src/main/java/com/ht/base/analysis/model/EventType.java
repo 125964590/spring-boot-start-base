@@ -15,6 +15,7 @@ public enum EventType {
      */
     HuaTuOnline_app_HuaTuOnline_SearchPlease,
     HuaTuOnline_app_pc_HuaTuOnline_CollectTest,
+    HuaTuOnline_pc_HuaTuOnline_SearchPlease,
     HuaTuOnline_app_pc_HuaTuOnline_ShareTest;
 
     public String getType(EventType eventType) {
