@@ -65,16 +65,15 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
         String requestPath = request.getServletPath();
         if (!checkRequestIntoTheFilter(requestPath, userCenterProperties)) {
             String token = tokenOptional.orElseThrow(() -> new BadAuthenticationException(NegativeResult.NO_POWER));
-            String redisKey = JWTTool.getToken(token);
             // get user info
-            Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
+            Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(token));
             checkRequestTree(method, requestPath, token);
             //set user info into thread local
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (tokenOptional.isPresent()) {
             Optional<String> redisKey = Optional.ofNullable(JWTTool.getToken(tokenOptional.get()));
             if (redisKey.isPresent()) {
-                Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey.get()));
+                Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(tokenOptional.get()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
