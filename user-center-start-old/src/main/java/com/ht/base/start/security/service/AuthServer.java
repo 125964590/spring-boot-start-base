@@ -38,4 +38,12 @@ public interface AuthServer {
     @RequestLine("GET /uc/auth/info?id={id}")
     ResponseData getUserInfo(@HeaderMap Map<String, Object> map, @Param("id") Long id);
 
+    /**
+     * get user info
+     *
+     * @return user info
+     */
+    @RequestLine("GET /uc/auth/info?id={id}")
+    ResponseData getUserInfo(@HeaderMap Map<String, Object> map);
+
 }

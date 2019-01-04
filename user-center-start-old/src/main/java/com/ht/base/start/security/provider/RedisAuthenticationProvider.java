@@ -2,7 +2,7 @@ package com.ht.base.start.security.provider;
 
 import com.ht.base.start.security.module.base.UserDetails;
 import com.ht.base.start.security.token.RedisAuthenticationToken;
-import com.ht.base.start.security.utils.RedisTokenUtils;
+import com.ht.base.start.security.utils.UserDetailsHandler;
 import com.ht.base.user.module.security.UserInfo;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,11 +15,11 @@ import org.springframework.security.core.AuthenticationException;
  **/
 public class RedisAuthenticationProvider implements AuthenticationProvider {
 
-    private final RedisTokenUtils redisTokenUtils;
+    private final UserDetailsHandler redisTokenUtils;
 
     private final ServerProperties serverProperties;
 
-    public RedisAuthenticationProvider(RedisTokenUtils redisTokenUtils, ServerProperties serverProperties) {
+    public RedisAuthenticationProvider(UserDetailsHandler redisTokenUtils, ServerProperties serverProperties) {
         this.redisTokenUtils = redisTokenUtils;
         this.serverProperties = serverProperties;
     }

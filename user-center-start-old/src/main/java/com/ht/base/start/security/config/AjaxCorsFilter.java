@@ -9,6 +9,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * @author zhengyi
+ * @date 11/20/18 7:39 PM
+ **/
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnProperty(value = "user-center.cors", havingValue = "true", matchIfMissing = true)

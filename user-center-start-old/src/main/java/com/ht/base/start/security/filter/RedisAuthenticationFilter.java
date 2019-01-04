@@ -9,7 +9,7 @@ import com.ht.base.user.utils.TreeUtil;
 import com.ht.base.start.security.exception.BadAuthenticationException;
 import com.ht.base.start.security.module.properties.UserCenterProperties;
 import com.ht.base.start.security.token.RedisAuthenticationToken;
-import com.ht.base.start.security.utils.RedisTokenUtils;
+import com.ht.base.start.security.utils.UserDetailsHandler;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,7 +44,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
 
     private static Boolean result = false;
 
-    private RedisTokenUtils redisTokenUtils;
+    private UserDetailsHandler userDetailsHandler;
 
     private ServerProperties serverProperties;
 
@@ -68,7 +68,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
             String redisKey = JWTTool.getToken(token);
             // get user info
             Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(redisKey));
-            checkRequestTree(method, requestPath, redisKey);
+            checkRequestTree(method, requestPath, token);
             //set user info into thread local
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (tokenOptional.isPresent()) {
@@ -82,7 +82,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void checkRequestTree(String method, String requestPath, String token) {
-        final UserInfo userInfo = redisTokenUtils.getUserInfo(token);
+        final UserInfo userInfo = userDetailsHandler.getUserInfo(token);
         //get local request path
         String localRequestPath = userCenterProperties.getPath();
         //search url in the application

@@ -7,7 +7,7 @@ import com.ht.base.start.security.module.properties.UserCenterProperties;
 import com.ht.base.start.security.provider.RedisAuthenticationProvider;
 import com.ht.base.start.security.provider.UserPasswordProvider;
 import com.ht.base.start.security.service.UserDetailsServer;
-import com.ht.base.start.security.utils.RedisTokenUtils;
+import com.ht.base.start.security.utils.UserDetailsHandler;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ServerProperties serverProperties;
 
-    private final RedisTokenUtils redisTokenUtils;
+    private final UserDetailsHandler userDetailsHandler;
 
     private final AuthenticationSuccessHandler successHandler;
 
@@ -43,11 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServer userDetailsServer;
 
-    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, ServerProperties serverProperties, RedisTokenUtils redisTokenUtils, AuthenticationSuccessHandler successHandler, FailLoginHandler failLoginHandler, UserDetailsServer userDetailsServer) {
+    public SecurityConfig(UserCenterProperties userCenterProperties, LogoutSuccessHandler logoutHandler, ServerProperties serverProperties, UserDetailsHandler userDetailsHandler, AuthenticationSuccessHandler successHandler, FailLoginHandler failLoginHandler, UserDetailsServer userDetailsServer) {
         this.userCenterProperties = userCenterProperties;
         this.logoutHandler = logoutHandler;
         this.serverProperties = serverProperties;
-        this.redisTokenUtils = redisTokenUtils;
+        this.userDetailsHandler = userDetailsHandler;
         this.successHandler = successHandler;
         this.failLoginHandler = failLoginHandler;
         this.userDetailsServer = userDetailsServer;
@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return RedisAuthenticationFilter.builder()
                 .userCenterProperties(userCenterProperties)
                 .authenticationManager(authenticationManager)
-                .redisTokenUtils(redisTokenUtils)
+                .userDetailsHandler(userDetailsHandler)
                 .serverProperties(serverProperties)
                 .pathMatcher(new AntPathMatcher()).build();
     }
@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RedisAuthenticationProvider redisAuthenticationProvider() {
-        return new RedisAuthenticationProvider(redisTokenUtils, serverProperties);
+        return new RedisAuthenticationProvider(userDetailsHandler, serverProperties);
     }
 
     /**
