@@ -2,6 +2,7 @@ package com.ht.base.analysis.annotation;
 
 import com.ht.base.analysis.event.AnalysisEvent;
 import com.ht.base.analysis.model.EventEntity;
+import com.ht.base.analysis.model.EventType;
 import com.ht.base.analysis.publisher.SpringContextPublisher;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -11,6 +12,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * @author zhengyi
@@ -31,9 +34,10 @@ public class AnalysisReportHandler {
 
     }
 
-    @Before("analysisReportCut()&&@annotation(analysisReport)")
-    public void doBefore(AnalysisReport analysisReport) {
+    @Before(value = "analysisReportCut()&&@annotation(analysisReport)&&args(terminal)")
+    public void doBefore(AnalysisReport analysisReport, int terminal) {
         System.out.println("开始记录->事件类型:" + analysisReport.value() + System.currentTimeMillis());
+        Optional.of(terminal).ifPresent(element -> EventEntity.putProperties(EventType.Default.platform, EventType.TerminalType.getTerminalName(element)));
         EventEntity.newInstance(analysisReport.value());
     }
 

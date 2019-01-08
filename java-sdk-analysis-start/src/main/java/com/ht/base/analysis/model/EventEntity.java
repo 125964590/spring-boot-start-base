@@ -2,6 +2,7 @@ package com.ht.base.analysis.model;
 
 import com.ht.base.analysis.exception.NoInstanceException;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class EventEntity {
         return propertiesMap;
     }
 
-    public static EventEntity getInstance() throws Exception {
+    public static EventEntity getInstance() throws NoInstanceException {
         return Optional.ofNullable(eventEntityThreadLocal.get()).orElseThrow(NoInstanceException::new);
     }
 
