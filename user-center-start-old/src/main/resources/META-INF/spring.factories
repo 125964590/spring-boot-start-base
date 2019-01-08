@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.ht.base.start.security.UserCenterAuthConfiguration,\
-  com.ht.base.start.security.controller.AuthController,\
-  com.ht.base.start.security.config.AjaxCorsFilter
