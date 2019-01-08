@@ -1,0 +1,17 @@
+user-center:
+  enable: true
+  url: http://192.168.100.22:11197
+  ribbon:
+    listOfServers: http://192.168.100.22:11197
+  auth-pass-paths:
+    - /back/lol
+    - /test
+  auth-paths:
+   - /back/**
+spring:
+  output:
+    ansi:
+      enabled: always
+  redis:
+    cluster:
+      nodes: 192.168.100.20:6489,192.168.100.20:6589,192.168.100.20:6689

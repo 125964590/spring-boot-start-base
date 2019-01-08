@@ -20,6 +20,6 @@
         <module>spring-boot-start-swagger2</module>
         <module>spring-boot-start-web-tool</module>
         <module>spring-boot-annotation</module>
-        <module>user-center-start</module>
+        <module>user-center-start-old</module>
     </modules>
 </project>

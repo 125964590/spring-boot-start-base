@@ -1,4 +1,0 @@
-# �Զ����ע���Զ���Ҫʵ��DeferredImportSelector,������ʵ����
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.ht.base.UserCenterAuthConfiguration,\
-  com.ht.base.controller.AuthController
