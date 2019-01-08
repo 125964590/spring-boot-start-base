@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * Created by shaojieyue
  * Created time 2016-04-18 09:56
  */
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @EnableConfigurationProperties
 @ConditionalOnProperty(value = "jbzm.web.tool.result", havingValue = "true", matchIfMissing = true)

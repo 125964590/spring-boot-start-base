@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.UUID;
+
 /**
  * @author jbzm
  * @date 2018下午9:59
@@ -34,4 +37,9 @@ public class lol {
         int a = 1 / 0;
     }
 
+    @GetMapping("/test03")
+    public Object test01(@Valid User user) {
+        user.setPassword(UUID.randomUUID().toString());
+        return user;
+    }
 }

@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <parent>
         <artifactId>spring-boot-start-base</artifactId>
         <groupId>com.ht.base.start</groupId>
@@ -10,13 +11,18 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-boot-annotation</artifactId>
-    <version>1.0-${project.environment}-SNAPSHOT</version>
+    <artifactId>java-sdk-analysis-start</artifactId>
+    <version>${default.version}</version>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sensorsdata.analytics.javasdk</groupId>
+            <artifactId>SensorsAnalyticsSDK</artifactId>
+            <version>3.1.8</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -28,15 +34,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
     </dependencies>
 

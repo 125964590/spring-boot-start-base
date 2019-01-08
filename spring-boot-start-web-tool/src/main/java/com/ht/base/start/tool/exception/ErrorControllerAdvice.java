@@ -7,16 +7,21 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
  * @author jbzm
  * @date Create on 2018/3/12 19:24
  */
-@Order(Ordered.HIGHEST_PRECEDENCE)
+
 @ControllerAdvice
 @EnableConfigurationProperties
 @ConditionalOnProperty(value = "jbzm.web.tool.exception", havingValue = "true")
@@ -32,5 +37,13 @@ public class ErrorControllerAdvice {
     @ResponseBody
     public Object jsonErrorHandler(MyException e) {
         return e.getErrorResult();
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseBody
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        StringBuffer errorContent = new StringBuffer();
+        ex.getBindingResult().getAllErrors().forEach(error -> errorContent.append(error.getDefaultMessage()).append("\n"));
+        return ResponseEntity.ok(ErrorResult.create(500, errorContent.toString(), System.currentTimeMillis()));
     }
 }

@@ -21,5 +21,6 @@
         <module>spring-boot-start-web-tool</module>
         <module>spring-boot-annotation</module>
         <module>user-center-start-old</module>
+        <module>java-sdk-analysis-start</module>
     </modules>
 </project>
