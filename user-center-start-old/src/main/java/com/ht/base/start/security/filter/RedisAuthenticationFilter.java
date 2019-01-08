@@ -72,6 +72,7 @@ public class RedisAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (tokenOptional.isPresent()) {
             Optional<String> redisKey = Optional.ofNullable(JWTTool.getToken(tokenOptional.get()));
+            //check token belong to user-center
             if (redisKey.isPresent()) {
                 Authentication authentication = authenticationManager.authenticate(new RedisAuthenticationToken(tokenOptional.get()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
