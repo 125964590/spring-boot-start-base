@@ -28,7 +28,7 @@ public class SensorsAnalieseTicsProxy {
     private void addPublicProperties(SensorsAnalytics sa) {
         Map<String, Object> publicProperties = new HashMap<>(16);
         publicProperties.put("business_line", "华图在线");
-        publicProperties.put("platform", "默认终端类型");
+        publicProperties.put("platform", "其他");
         publicProperties.put("product_name", "华图在线");
         publicProperties.put("domain_first_classification", "v");
         sa.registerSuperProperties(publicProperties);

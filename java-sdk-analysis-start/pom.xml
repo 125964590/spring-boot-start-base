@@ -16,6 +16,15 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.ht.base.common</groupId>
+            <artifactId>base-common</artifactId>
+            <version>${default.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>

@@ -13,6 +13,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface AnalysisReport {
 
-    EventType value() default EventType.HuaTuOnline_app_HuaTuOnline_SearchPlease;
+    EventType value() default EventType.HuaTuOnline_app_HuaTuOnline_PleaseSearch;
 
 }

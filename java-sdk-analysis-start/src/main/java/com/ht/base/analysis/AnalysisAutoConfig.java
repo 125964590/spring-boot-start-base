@@ -1,5 +1,6 @@
 package com.ht.base.analysis;
 
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import com.ht.base.analysis.annotation.AnalysisReportHandler;
 import com.ht.base.analysis.config.SensorsAnalieseTicsProxy;
 import com.ht.base.analysis.listener.ContextClosedListener;
@@ -13,12 +14,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.ht.base.common.ApolloServiceConstant.DATA_ANALYSIS;
+
 /**
  * @author zhengyi
  * @date 2018-12-25 17:46
  **/
 @Configuration
 @EnableConfigurationProperties(AnalysisProperties.class)
+@EnableApolloConfig(DATA_ANALYSIS)
 @ConditionalOnProperty(value = "jbzm.analysis.enable", havingValue = "true", matchIfMissing = true)
 public class AnalysisAutoConfig {
 

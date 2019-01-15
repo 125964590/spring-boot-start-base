@@ -13,7 +13,7 @@ public enum EventType {
     /**
      * event type enum
      */
-    HuaTuOnline_app_HuaTuOnline_SearchPlease,
+    HuaTuOnline_app_HuaTuOnline_PleaseSearch,
     HuaTuOnline_app_pc_HuaTuOnline_CollectTest,
     HuaTuOnline_pc_HuaTuOnline_SearchPlease,
     HuaTuOnline_app_pc_HuaTuOnline_ShareTest;
@@ -103,16 +103,16 @@ public enum EventType {
         /**
          * terminal type
          */
-        andoraid(1, "AndoraidApp"),
-        ios(2, "iosApp"),
+        android(1, "AndroidApp"),
+        ios(2, "iOSApp"),
         pc(3, "PC"),
-        andora_ipad(4, "AndoraidApp"),
-        ios_ipad(5, "iosApp"),
+        android_ipad(4, "AndroidApp"),
+        ios_ipad(5, "iOSApp"),
         wx(6, "wx"),
         m_pc(7, "PC"),
         batch_register(8, "batch"),
         education(9, "education"),
-        little_program(21, "小程序");
+        little_program(21, "微信小程序");
         private int terminal;
         private String terminalName;
 
