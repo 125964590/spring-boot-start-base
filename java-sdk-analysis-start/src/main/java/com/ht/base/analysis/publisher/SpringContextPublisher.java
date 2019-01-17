@@ -1,10 +1,14 @@
 package com.ht.base.analysis.publisher;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * @author zhengyi
@@ -19,7 +23,11 @@ public class SpringContextPublisher implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public void pushEvent(ApplicationEvent applicationEvent) {
-        applicationContext.publishEvent(applicationEvent);
+    public void pushEvent(ApplicationEvent applicationEvent) throws ExecutionException, InterruptedException {
+        FutureTask<String> futureTasked = new FutureTask<>(() -> {
+            applicationContext.publishEvent(applicationEvent);
+            return "ok";
+        });
+        futureTasked.get();
     }
 }
