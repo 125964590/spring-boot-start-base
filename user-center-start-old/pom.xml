@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.huatu</groupId>
     <artifactId>user-center-start-old</artifactId>
     <version>1.0-${project.environment}-SNAPSHOT</version>
 

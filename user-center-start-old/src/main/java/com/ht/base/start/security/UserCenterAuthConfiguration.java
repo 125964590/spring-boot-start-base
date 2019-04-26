@@ -8,6 +8,7 @@ import com.ht.base.start.security.handler.LogoutHandler;
 import com.ht.base.start.security.handler.SuccessLoginHandler;
 import com.ht.base.start.security.module.properties.UserCenterProperties;
 import com.ht.base.start.security.service.UserDetailsServer;
+import com.ht.base.start.security.service.UserOption;
 import com.ht.base.start.security.utils.UserDetailsHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -72,7 +73,12 @@ public class UserCenterAuthConfiguration {
 
     @Bean
     public UserDetailsServer userDetailsServer(FeignConfig feignConfig, UserDetailsHandler userDetailsHandler) {
-        return new UserDetailsServer(feignConfig.authService(),userDetailsHandler);
+        return new UserDetailsServer(feignConfig.authService(), userDetailsHandler);
+    }
+
+    @Bean
+    public UserOption userOptionService(FeignConfig feignConfig) {
+        return new UserOption(feignConfig.userOptionService());
     }
 
     @Bean

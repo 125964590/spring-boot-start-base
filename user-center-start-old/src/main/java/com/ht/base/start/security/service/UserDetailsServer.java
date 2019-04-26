@@ -20,7 +20,6 @@ import java.util.LinkedHashMap;
  * @author zhengyi
  * @date 11/23/18 1:54 PM
  **/
-@Component
 public class UserDetailsServer {
 
     private final AuthServer authServer;

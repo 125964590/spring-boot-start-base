@@ -1,20 +1,26 @@
 package com.ht.base.analysis.publisher;
 
-import lombok.extern.slf4j.Slf4j;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 /**
  * @author zhengyi
  * @date 2018-12-22 18:11
  **/
 public class SpringContextPublisher implements ApplicationContextAware {
+
+    private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+            .setNameFormat("demo-pool-%d").build();
+
+    private ExecutorService pool = new ThreadPoolExecutor(5, 200,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
 
     private ApplicationContext applicationContext;
 
@@ -23,11 +29,11 @@ public class SpringContextPublisher implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public void pushEvent(ApplicationEvent applicationEvent) throws ExecutionException, InterruptedException {
+    public void pushEvent(ApplicationEvent applicationEvent) {
         FutureTask<String> futureTasked = new FutureTask<>(() -> {
             applicationContext.publishEvent(applicationEvent);
             return "ok";
         });
-        futureTasked.get();
+        pool.execute(futureTasked);
     }
 }
