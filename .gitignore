@@ -32,7 +32,6 @@ target/
 classes/
 logs/
 work/
-log/
 *.doc
 *.log
 *.cache
