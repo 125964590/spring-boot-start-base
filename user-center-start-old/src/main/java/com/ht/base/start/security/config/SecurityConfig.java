@@ -8,6 +8,7 @@ import com.ht.base.start.security.provider.RedisAuthenticationProvider;
 import com.ht.base.start.security.provider.UserPasswordProvider;
 import com.ht.base.start.security.service.UserDetailsServer;
 import com.ht.base.start.security.utils.UserDetailsHandler;
+import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -87,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * TODO: need add annotation
      */
     @Override
+    @SneakyThrows
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
 
