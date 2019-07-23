@@ -1,8 +1,9 @@
 package com.ht.base.start.web.tool.advice;
 
-import com.ht.base.common.CommonResult;
-import com.ht.base.common.Result;
-import com.ht.base.common.SuccessResponse;
+import com.talbrain.vegas.domain.Result;
+import com.talbrain.vegas.domain.SuccessResponse;
+import com.talbrain.vegas.domain.SystemResponseStatus;
+import com.talbrain.vegas.domain.exception.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -53,7 +54,7 @@ public class WrapperResponseBodyAdvice implements ResponseBodyAdvice {
             return o;
         }
         //最后进行包装
-        return o == null ? CommonResult.SUCCESS : new SuccessResponse(o);
+        return o == null ? SystemResponseStatus.SUCCESS : new SuccessResponse(o);
     }
 
     /**

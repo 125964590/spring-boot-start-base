@@ -1,7 +1,7 @@
 package com.ht.base.start;
 
-import com.ht.base.common.ErrorResult;
-import com.ht.base.exception.MyException;
+import com.talbrain.vegas.domain.exception.BizException;
+import com.talbrain.vegas.domain.exception.ErrorResult;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class lol {
 
     @GetMapping("test01")
     public void test01() {
-        throw new MyException(ErrorResult.create(111, "lol"));
+        throw new BizException(ErrorResult.create(111, "lol"));
     }
 
     @GetMapping("test02")
@@ -35,6 +35,14 @@ public class lol {
     @GetMapping
     public void test03() {
         int a = 1 / 0;
+    }
+
+    @GetMapping("test04")
+    public Object test04(){
+        User user=new User();
+        user.setPassword("qerqwewq");
+        user.setName("jbzm");
+        return user;
     }
 
     @GetMapping("/test03")

@@ -2,3 +2,4 @@ jbzm:
   web:
     tool:
       exception: true
+      result: true
