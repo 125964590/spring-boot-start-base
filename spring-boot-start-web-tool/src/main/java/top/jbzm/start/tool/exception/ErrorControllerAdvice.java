@@ -1,6 +1,10 @@
 package top.jbzm.start.tool.exception;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,18 +19,29 @@ import javax.servlet.http.HttpServletRequest;
  * @author jbzm
  * @date Create on 2018/3/12 19:24
  */
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-@ConditionalOnProperty(value = "jbzm.web.tool.exception", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(value = "jbzm.web.tool.exception", havingValue = "true", matchIfMissing = false)
 public class ErrorControllerAdvice {
 
-    @ExceptionHandler(value = Exception.class)
-    public Result defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-        return ErrorResult.create(2333333, "服务器内部错误");
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Result> exception(Exception e) {
+
+        Integer status = null;
+
+        if (e instanceof MyException) {
+            status = HttpStatus.OK.value();
+        } else {
+            HttpStatus.INTERNAL_SERVER_ERROR.value();
+        }
+
+        return ResponseEntity.ok(ErrorResult.create(500,"服务器内部错误"));
     }
 
     @ExceptionHandler(value = MyException.class)
     @ResponseBody
     public Object jsonErrorHandler(HttpServletRequest req, MyException e) throws Exception {
+        System.out.println("qeqweqwe");
         return e.getErrorResult();
     }
 }
