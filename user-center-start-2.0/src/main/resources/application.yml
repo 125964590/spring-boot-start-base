@@ -1,0 +1,14 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  redis:
+    cluster:
+      nodes: 192.168.100.20:6489,192.168.100.20:6589,192.168.100.20:6689
+server:
+  servlet:
+    context-path: /ut
+
+
+
+

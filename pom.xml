@@ -4,20 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>top.jbzm.start</groupId>
+    <groupId>com.ht.base.start</groupId>
     <artifactId>spring-boot-start-base</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
     <parent>
-        <groupId>top.jbzm</groupId>
-        <artifactId>parent-base</artifactId>
+        <groupId>com.ht.base</groupId>
+        <artifactId>parent-base-cloud</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modules>
         <module>spring-boot-start-swagger2</module>
         <module>spring-boot-start-web-tool</module>
+        <module>spring-boot-annotation</module>
+        <module>user-center-start-2.0</module>
+        <module>java-sdk-analysis-start</module>
     </modules>
 </project>
